@@ -1,11 +1,24 @@
+from datetime import datetime
+
 from models.tournament import Tournament
 from models.player import Player
 from views.tournament_view import TournamentView
 from views.player_view import PlayerView
 
 
+def validate(date_text):
+    try:
+        if date_text != datetime.strptime(date_text, Controller.format).strftime(Controller.format):
+            raise ValueError
+        return True
+    except ValueError:
+        return False
+
+
 class Controller:
     """ Main controller """
+
+    format = "%d/%m/%Y"
 
     def __init__(self):
         """ we add the tournament view and tournament model to the controller """
@@ -17,22 +30,27 @@ class Controller:
         self.player_view = PlayerView()
 
     def menu(self):
-        self.tournament_question()
+        # self.tournament_question()
         self.player_question()
 
     def tournament_question(self):
         input_tournament = []
-        for quest in (self.tournament_view.quest_name, self.tournament_view.quest_place,
-                      self.tournament_view.quest_ctrl, self.tournament_view.quest_desc,
-                      self.tournament_view.quest_nb_round):
+        questions_tournament = [self.tournament_view.quest_name, self.tournament_view.quest_place,
+                                self.tournament_view.quest_ctrl, self.tournament_view.quest_desc,
+                                self.tournament_view.quest_nb_round]
+        for quest in questions_tournament:
+            good_answer = False
             self.tournament_view.tournament_ask(quest)
-            answer = input('>> ')
-            while answer == '':
-                print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
+            answer = None
+            while not good_answer:
+                good_answer = True
                 answer = input('>> ')
-            while quest == self.tournament_view.quest_nb_round and answer.isnumeric() is False:
-                print('Vous n\'avez pas saisi un entier pour le nombre de rounds.')
-                answer = input('>> ')
+                if answer == '':
+                    print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
+                    good_answer = False
+                elif quest == self.tournament_view.quest_nb_round and answer.isnumeric() is False:
+                    print('Vous n\'avez pas saisi un entier pour le nombre de rounds.')
+                    good_answer = False
             input_tournament.append(answer)
         self.tournament = Tournament(*input_tournament)
         self.tournament.insert_tournament(self.tournament.serializ_tournament())
@@ -42,20 +60,25 @@ class Controller:
 
     def player_question(self):
         input_player = []
-        for quest in (self.player_view.quest_name, self.player_view.quest_last_name,
-                      self.player_view.quest_birth_date, self.player_view.quest_sex):
+        questions_player = [self.player_view.quest_name, self.player_view.quest_last_name,
+                            self.player_view.quest_birth_date, self.player_view.quest_sex]
+        for quest in questions_player:
+            good_answer = False
             self.player_view.player_ask(quest)
-            answer = input('>> ')
-            while answer == '':
-                print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
+            answer = None
+            while not good_answer:
+                good_answer = True
                 answer = input('>> ')
-            while quest == self.player_view.quest_birth_date and answer.isnumeric() is False:
-                print('Vous n\'avez pas saisi une date pour la date de naissance.')
-                answer = input('>> ')
+                if answer == '':
+                    print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
+                    good_answer = False
+                elif quest == self.player_view.quest_birth_date and \
+                        validate(answer) is False:
+                    print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
+                    good_answer = False
             input_player.append(answer)
         self.player = Player(*input_player)
         self.player.insert_player(self.player.serializ_player())
-
 
     ''' appel au controler pour:
         créer les joueurs
