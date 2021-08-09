@@ -8,6 +8,24 @@
 			"players": -6564289466630511388,
 			"time_control": "dfg",
 			"description": "dfgdfg"
+		},
+		"2": {
+			"name": "iiiii",
+			"place": "iiii",
+			"tourn_date": "{TinyDate}:2021-08-09T15:40:59.058577",
+			"rounds": [],
+			"players": [],
+			"time_control": "iiii",
+			"description": "iiii"
+		},
+		"3": {
+			"name": "uuuu",
+			"place": "uuuuu",
+			"tourn_date": "{TinyDate}:2021-08-09T17:28:35.736256",
+			"rounds": [],
+			"players": [],
+			"time_control": "uuuu",
+			"description": "uuuu"
 		}
 	},
 	"player": {
@@ -15,6 +33,20 @@
 			"name": "dfgdfg",
 			"last_name": "dfgdf",
 			"birth_date": "12",
+			"sex": "M",
+			"ranking": 0
+		},
+		"2": {
+			"name": "LOOLO",
+			"last_name": "IKIK",
+			"birth_date": "16",
+			"sex": "M",
+			"ranking": 0
+		},
+		"3": {
+			"name": "jjjj",
+			"last_name": "jjjj",
+			"birth_date": "34",
 			"sex": "M",
 			"ranking": 0
 		}

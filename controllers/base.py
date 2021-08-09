@@ -35,8 +35,7 @@ class Controller:
                 answer = input('>> ')
             input_tournament.append(answer)
         self.tournament = Tournament(*input_tournament)
-        self.tournament.insert_tournament()
-        # self.tournament.insert_tournament('test', 'paris', 'tournoi de test')
+        self.tournament.insert_tournament(self.tournament.serializ_tournament())
 
     def update_tournament(self):
         self.tournament = Tournament(*self.choices)
@@ -55,4 +54,17 @@ class Controller:
                 answer = input('>> ')
             input_player.append(answer)
         self.player = Player(*input_player)
-        self.player.insert_player()
+        self.player.insert_player(self.player.serializ_player())
+
+
+    ''' appel au controler pour:
+        créer les joueurs
+        créer un tournoi
+        créer le 1er round avec génération des paires
+        génération du match
+        entrée des résultats
+        entrée du classement
+        maj round
+        génération 2e round
+
+    '''

@@ -15,15 +15,15 @@ class Player:
     def update_ranking(self, rank):
         self.rank = rank
 
-    def insert_player(self):  # , name='', last_name='', birth_date='', sex='M', ranking=''):
-        dict_t = {'name': self.name,
+    def serializ_player(self) -> dict:
+        return {'name': self.name,
                   'last_name': self.last_name,
                   'birth_date': self.birth_date,
                   'sex': self.sex,
                   'ranking': self.rank}
-        self.player.insert(dict_t)
-        """self.player.insert({'name': name, 'last_name': last_name, 'birth_date': birth_date,
-                            'sex': sex, 'ranking': ranking})"""
+
+    def insert_player(self, player_serializ):
+        self.player.insert(player_serializ)
 
     def search_player(self, field='name', value=''):
         """ to find data by giving the field and a value """

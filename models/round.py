@@ -12,7 +12,8 @@ class Round:
         self.name = name
         self.data_hour_start = data_hour_start
         self.data_hour_end = data_hour_end
-        self.match = [Match]
+        self.match = []
+        self.result = None
 
     def create_round(self):
         pass
@@ -21,9 +22,9 @@ class Round:
         # generate pair of players with the Tournament Swiss system
         pass
 
-    def insert_round(self, name='', match='', result='', date_hour_begin='M', date_hour_end=''):
-        self.round.insert({'name': name, 'match': match, 'result': result,
-                           'date_hour_begin': date_hour_begin, 'date_hour_end': date_hour_end})
+    def insert_round(self):
+        self.round.insert({'name': self.name, 'match': self.match, 'result': self.result,
+                           'data_hour_start': self.data_hour_start, 'data_hour_end': self.data_hour_end})
 
     def search_round(self, field='name', value=''):
         results = self.round.search(where(field) == value)  # returns a list

@@ -30,21 +30,20 @@ class Tournament:
         self.time_control = time_control
         self.description = description
         self.rounds = name
-        self.players = [Player]
-        self.rounds = [Round]
+        self.players = []
+        self.rounds = []
 
-    def serialize(self):
-        pass
-
-    def insert_tournament(self):
-        dict_t = {'name': self.name,
+    def serializ_tournament(self) -> dict:
+        return {'name': self.name,
                                 'place': self.place,
                                 'tourn_date': datetime.datetime.now(),
-                                'rounds': hash(tuple(self.rounds)),
-                                'players': hash(tuple(self.players)),
+                                'rounds': self.rounds,
+                                'players': self.players,
                                 'time_control': self.time_control,
                                 'description': self.description}
-        self.tournament.insert(dict_t)
+
+    def insert_tournament(self, tournament_serializ):
+        self.tournament.insert(tournament_serializ)
 
     def search_tournament(self, field='name', value=''):
         results = self.tournament.search(where(field) == value)  # returns a list

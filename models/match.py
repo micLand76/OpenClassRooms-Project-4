@@ -25,9 +25,9 @@ class Match:
     def create_match(self):
         pass
 
-    def insert_match(self, name='', last_name='', birth_date='', sex='M', ranking=''):
-        self.match.insert({'name': name, 'last_name': last_name, 'birth_date': birth_date,
-                           'sex': sex, 'ranking': ranking})
+    def insert_match(self):
+        self.match.insert({'id_match': self.id_match, 'player_1': self.player_1, 'player_2': self.player_2,
+                           'result_1': self.result_1, 'result_2': self.result_2})
 
     def search_match(self, field='name', value=''):
         results = self.match.search(where(field) == value)  # returns a list
