@@ -1,1 +1,22 @@
-{"tournament": {"1": {"name": "", "place": "", "tours_number": "", "rounds": "", "players": "", "time_control": "", "description": ""}, "2": {"name": "", "place": "", "tours_number": "", "rounds": "", "players": "", "time_control": "", "description": ""}}, "round": {"1": {"name": "", "match": "", "result": "", "date_hour_begin": "", "date_hour_end": ""}, "2": {"name": "", "match": "", "result": "", "date_hour_begin": "", "date_hour_end": ""}}, "match": {"1": {"ID": "", "player1_result1": "", "player2_result2": ""}, "2": {"ID": "", "player1_result1": "", "player2_result2": ""}}, "player": {"1": {"ID_player": "", "name": "", "last_name": "", "birth_date": "", "sex": "", "ranking": ""}, "2": {"ID_player": "", "name": "", "last_name": "", "birth_date": "", "sex": "", "ranking": ""}}}
+{
+	"tournament": {
+		"1": {
+			"name": "dfxgdfg",
+			"place": "dfgdf",
+			"tourn_date": "{TinyDate}:2021-08-09T14:48:13.872478",
+			"rounds": 7946540698044952376,
+			"players": -6564289466630511388,
+			"time_control": "dfg",
+			"description": "dfgdfg"
+		}
+	},
+	"player": {
+		"1": {
+			"name": "dfgdfg",
+			"last_name": "dfgdf",
+			"birth_date": "12",
+			"sex": "M",
+			"ranking": 0
+		}
+	}
+}

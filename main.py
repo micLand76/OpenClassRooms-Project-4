@@ -1,19 +1,34 @@
-from tinydb import TinyDB, Query, where
 from pprint import pprint
+import views.matchview
+from models.player import Player
+from models.tournament import Tournament
+from controllers.base import Controller
+from views.tournament_view import TournamentView
 
-db = TinyDB('db.json')
+if __name__ == "__main__":
+    ''' appel au controler pour:
+        créer les joueurs
+        créer un tournoi
+        créer le 1er round avec génération des paires
+        génération du match
+        entrée des résultats
+        entrée du classement
+        maj round
+        génération 2e round
 
-tournament = db.table('tournament')
-round = db.table('round')
-match = db.table('match')
-player = db.table('player')
+    '''
+    #tournament = Tournament('Tournoi 1', 'Paris', '30/07/21', 'Tournoi ete')
+    #tournament_view = TournamentView()
+    controller = Controller()
+    controller.menu()
 
-tournament.insert({'name': '', 'place': '', 'tours_number': '', 'rounds': '', \
-                  'players': '', 'time_control': '', 'description': ''})
-round.insert({'name': '', 'match': '', 'result': '', 'date_hour_begin': '', \
-                  'date_hour_end': ''})
-match.insert({'ID': '', 'player1_result1': '', 'player2_result2': ''})
-player.insert({'ID_player': '', 'name': '', 'last_name': '', 'birth_date': '', \
-                  'sex': '', 'ranking': ''})
-
-pprint(tournament.all())
+    """
+    pt = Player()
+    pt.insert_player('Martin', 'John', '19/09/1976', 'M', 5)
+    id_player = pt.search_player('name', 'Martin')
+    print("id_player :", id_player)
+    print(pt.search_player_by_id(12))
+    print('le joueur est: ', pt.search_player('name', views.matchview.search_player_by_name()))"""
+    # print(len(pt.player))
+    # pt.update_player()
+    # MatchView()
