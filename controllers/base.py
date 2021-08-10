@@ -30,8 +30,8 @@ class Controller:
         self.player_view = PlayerView()
 
     def menu(self):
-        # self.tournament_question()
-        self.player_question()
+        self.tournament_question()
+        self.player_question(3)
 
     def tournament_question(self):
         input_tournament = []
@@ -58,27 +58,31 @@ class Controller:
     def update_tournament(self):
         self.tournament = Tournament(*self.choices)
 
-    def player_question(self):
-        input_player = []
-        questions_player = [self.player_view.quest_name, self.player_view.quest_last_name,
-                            self.player_view.quest_birth_date, self.player_view.quest_sex]
-        for quest in questions_player:
-            good_answer = False
-            self.player_view.player_ask(quest)
-            answer = None
-            while not good_answer:
-                good_answer = True
-                answer = input('>> ')
-                if answer == '':
-                    print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
-                    good_answer = False
-                elif quest == self.player_view.quest_birth_date and \
-                        validate(answer) is False:
-                    print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
-                    good_answer = False
-            input_player.append(answer)
-        self.player = Player(*input_player)
-        self.player.insert_player(self.player.serializ_player())
+    def update_players_tournament(self, player):
+        self.tournament.players.append(player)
+
+    def player_question(self, nb_players=8):
+        for player in range(1, nb_players+1):
+            input_player = []
+            questions_player = [self.player_view.quest_name, self.player_view.quest_last_name,
+                                self.player_view.quest_birth_date, self.player_view.quest_sex]
+            for quest in questions_player:
+                good_answer = False
+                self.player_view.player_ask(quest, player)
+                answer = None
+                while not good_answer:
+                    good_answer = True
+                    answer = input('>> ')
+                    if answer == '':
+                        print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
+                        good_answer = False
+                    elif quest == self.player_view.quest_birth_date and \
+                            validate(answer) is False:
+                        print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
+                        good_answer = False
+                input_player.append(answer)
+            self.player = Player(*input_player)
+            self.player.insert_player(self.player.serializ_player())
 
     ''' appel au controler pour:
         créer les joueurs

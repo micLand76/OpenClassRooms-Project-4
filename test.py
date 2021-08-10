@@ -1,4 +1,4 @@
-for col in range(1, 21):
-   for lgn in range(1, 21):
-      print(str(col*lgn) + ' ', end='')
-   print()
+âgeCadet = int(input())
+âgeAîné = int(input())
+différence = âgeAîné - âgeCadet
+print(différence)

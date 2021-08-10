@@ -6,5 +6,6 @@ class RoundView:
         self.quest_birth_date = 'Veuillez saisir la date de naissance du joueur : '
         self.quest_sex = 'Veuillez saisir le sexe du joueur : '
 
-    def round_ask(self, quest) -> None:
+    @staticmethod
+    def round_ask(quest) -> None:
         print(quest)

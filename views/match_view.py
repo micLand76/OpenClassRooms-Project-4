@@ -6,5 +6,6 @@ class MatchView:
         self.quest_birth_date = 'Veuillez saisir la date de naissance du joueur : '
         self.quest_sex = 'Veuillez saisir le sexe du joueur : '
 
-    def match_ask(self, quest) -> None:
+    @staticmethod
+    def match_ask(quest) -> None:
         print(quest)

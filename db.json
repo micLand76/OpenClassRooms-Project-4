@@ -26,6 +26,15 @@
 			"players": [],
 			"time_control": "uuuu",
 			"description": "uuuu"
+		},
+		"4": {
+			"name": "TEST1",
+			"place": "PARIS",
+			"tourn_date": "{TinyDate}:2021-08-10T15:14:34.870698",
+			"rounds": [],
+			"players": [],
+			"time_control": "TEST",
+			"description": "MLLM"
 		}
 	},
 	"player": {
@@ -61,6 +70,27 @@
 			"name": "hythj",
 			"last_name": "ytj",
 			"birth_date": "10/11/2000",
+			"sex": "M",
+			"ranking": 0
+		},
+		"6": {
+			"name": "AAA",
+			"last_name": "AAAAA",
+			"birth_date": "12/12/2020",
+			"sex": "M",
+			"ranking": 0
+		},
+		"7": {
+			"name": "BBBB",
+			"last_name": "BBBBB",
+			"birth_date": "09/09/1990",
+			"sex": "F",
+			"ranking": 0
+		},
+		"8": {
+			"name": "CCC",
+			"last_name": "CCCC",
+			"birth_date": "20/02/2000",
 			"sex": "M",
 			"ranking": 0
 		}

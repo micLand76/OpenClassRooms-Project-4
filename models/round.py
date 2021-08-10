@@ -20,6 +20,7 @@ class Round:
 
     def generate_pair(self, round_number):
         # generate pair of players with the Tournament Swiss system
+
         pass
 
     def insert_round(self):

@@ -17,10 +17,10 @@ class Player:
 
     def serializ_player(self) -> dict:
         return {'name': self.name,
-                  'last_name': self.last_name,
-                  'birth_date': self.birth_date,
-                  'sex': self.sex,
-                  'ranking': self.rank}
+                'last_name': self.last_name,
+                'birth_date': self.birth_date,
+                'sex': self.sex,
+                'ranking': self.rank}
 
     def insert_player(self, player_serializ):
         self.player.insert(player_serializ)

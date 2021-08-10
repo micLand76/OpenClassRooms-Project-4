@@ -1,11 +1,7 @@
-import json
 import datetime
-from datetime import date
 from json import JSONEncoder
 from tinydb import TinyDB, where
 
-from models.player import Player
-from models.round import Round
 from models.access_db import DbManag
 
 
@@ -22,7 +18,8 @@ class Tournament:
         and contain the rank of the players"""
     tournament = DbManag.db.table('tournament')
 
-    def __init__(self, name, place, description, time_control='Bullet', tour_number=4, tourn_date=datetime.datetime.now()):
+    def __init__(self, name, place, description, time_control='Bullet', tour_number=4,
+                 tourn_date=datetime.datetime.now()):
         self.name = name
         self.place = place
         self.tourn_date = tourn_date
@@ -35,12 +32,12 @@ class Tournament:
 
     def serializ_tournament(self) -> dict:
         return {'name': self.name,
-                                'place': self.place,
-                                'tourn_date': datetime.datetime.now(),
-                                'rounds': self.rounds,
-                                'players': self.players,
-                                'time_control': self.time_control,
-                                'description': self.description}
+                'place': self.place,
+                'tourn_date': datetime.datetime.now(),
+                'rounds': self.rounds,
+                'players': self.players,
+                'time_control': self.time_control,
+                'description': self.description}
 
     def insert_tournament(self, tournament_serializ):
         self.tournament.insert(tournament_serializ)
