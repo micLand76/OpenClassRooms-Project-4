@@ -42,15 +42,14 @@ class Tournament:
     def insert_tournament(self, tournament_serializ):
         self.tournament.insert(tournament_serializ)
 
-    def search_tournament(self, field='name', value=''):
+    def search_id_tournament(self, field='name', value=''):
+        """ search the id of the tournament by giving a value of a field """
         results = self.tournament.search(where(field) == value)  # returns a list
         for res in results:
-            return res  # type: TinyDB.database.Document
-            # print(res.city) # Not allowed!
-            # print(res[field])
+            return res.doc_id
 
     def search_tournament_by_id(self, value=1) -> str:
         return 'le tournoi ' + str(self.tournament.get(doc_id=value))
 
     def update_tournament(self, id_tournament='', field='name', value=''):
-        self.tournament.update({field: value}, DbManag.User.id_tournament == id_tournament)
+        self.tournament.update({field: value}) #, self.tournament. == id_tournament)

@@ -7,12 +7,12 @@ from views.player_view import PlayerView
 
 
 def validate(date_text):
-    """ verify if a date given respect the date format given in the controller.format
-    and strftime converts the datetime object containing current
-    date and time to the controller.format format """
-    return date_text != datetime.strptime(
-        date_text, Controller.format
-    ).strftime(Controller.format)
+    try:
+        if date_text != datetime.strptime(date_text, Controller.format).strftime(Controller.format):
+            raise ValueError
+        return True
+    except ValueError:
+        return False
 
 
 class Controller:
@@ -57,18 +57,6 @@ class Controller:
         self.tournament.insert_tournament(self.tournament.serializ_tournament())
         self.tournament_id = self.tournament.search_id_tournament('name', self.tournament.name)
 
-    @staticmethod
-    def verif_answer_empty(answer):
-        if answer == '':
-            print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
-            return True
-
-    @staticmethod
-    def verif_format_date(answer_date):
-        if validate(answer_date) is False:
-            print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
-            return True
-
     def update_players_tournament(self, player):
         self.tournament.update_tournament(self.tournament_id, 'players', player)
 
@@ -86,12 +74,12 @@ class Controller:
                 answer = None
                 while not good_answer:
                     answer = input('>> ')
-                    if self.verif_answer_empty(answer) is True:
-                        """ test the answer is not empty """
-                        # print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
-                    elif quest == self.player_view.quest_birth_date and self.verif_format_date(answer) is True:
+                    """ test the answer is not empty """
+                    if answer == '':
+                        print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
                         """ verify the date format """
-                        # print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
+                    elif quest == self.player_view.quest_birth_date and validate(answer) is False:
+                        print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
                     else:
                         good_answer = True
                 input_player.append(answer)
