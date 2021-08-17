@@ -8,7 +8,7 @@ class PlayerView:
 
     @staticmethod
     def player_ask(quest, player) -> None:
-        print(quest + f"{player} : ")
+        print(f"{quest} {player} : ")
 
     @staticmethod
     def display_player():

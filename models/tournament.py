@@ -52,4 +52,4 @@ class Tournament:
         return 'le tournoi ' + str(self.tournament.get(doc_id=value))
 
     def update_tournament(self, id_tournament='', field='name', value=''):
-        self.tournament.update({field: value}) #, self.tournament. == id_tournament)
+        self.tournament.update({field: value}, doc_ids=[id_tournament])

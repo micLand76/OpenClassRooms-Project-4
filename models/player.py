@@ -1,4 +1,5 @@
 from models.access_db import DbManag
+from tinydb import TinyDB, where
 
 
 class Player:
@@ -28,6 +29,12 @@ class Player:
     def search_player(self, field='name', value=''):
         """ to find data by giving the field and a value """
         return DbManag.search_data(self.player, field, value)
+
+    def search_id_player(self, field='name', value=''):
+        """ search the id of the player by giving a value of a field """
+        results = self.player.search(where(field) == value)  # returns a list
+        for res in results:
+            return res.doc_id
 
     def search_player_by_id(self, value=1) -> str:
         return 'le joueur ' + str(self.player.get(doc_id=value))
