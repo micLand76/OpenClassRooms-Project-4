@@ -1,284 +1,40 @@
 {
-	"tournament": {
-		"1": {
-			"name": "zfz",
-			"place": "zefze",
-			"tourn_date": "{TinyDate}:2021-08-15T20:14:01.466609",
-			"rounds": [],
-			"players": {
-				"name": "seezrze",
-				"last_name": "zerz",
-				"birth_date": "12/11/1234",
-				"sex": "df",
-				"ranking": 0
-			},
-			"time_control": "fzef",
-			"description": "ezfz"
-		},
-		"2": {
-			"name": "___\u00e8",
-			"place": "yui",
-			"tourn_date": "{TinyDate}:2021-08-15T20:17:58.770089",
-			"rounds": [],
-			"players": {
-				"name": "seezrze",
-				"last_name": "zerz",
-				"birth_date": "12/11/1234",
-				"sex": "df",
-				"ranking": 0
-			},
-			"time_control": "yi",
-			"description": "yuiy"
-		},
-		"3": {
-			"name": "rgsrrgf",
-			"place": "regr",
-			"tourn_date": "{TinyDate}:2021-08-17T16:36:06.559022",
-			"rounds": [],
-			"players": {
-				"name": "seezrze",
-				"last_name": "zerz",
-				"birth_date": "12/11/1234",
-				"sex": "df",
-				"ranking": 0
-			},
-			"time_control": "ergre",
-			"description": "reg"
-		},
-		"4": {
-			"name": "kyuiyui",
-			"place": "iutitui",
-			"tourn_date": "{TinyDate}:2021-08-17T16:55:07.791535",
-			"rounds": [],
-			"players": [],
-			"time_control": "itity",
-			"description": "tgiyui"
-		},
-		"5": {
-			"name": "dfdfgdf",
-			"place": "dfdf",
-			"tourn_date": "{TinyDate}:2021-08-17T17:00:38.720511",
-			"rounds": [],
-			"players": [],
-			"time_control": "gdgt",
-			"description": "dgdgd"
-		},
-		"6": {
-			"name": "retegt",
-			"place": "erte",
-			"tourn_date": "{TinyDate}:2021-08-17T17:01:35.312263",
-			"rounds": [],
-			"players": [],
-			"time_control": "er",
-			"description": "reertr"
-		},
-		"7": {
-			"name": "ffezr",
-			"place": "fezrfezr",
-			"tourn_date": "{TinyDate}:2021-08-17T17:04:17.327779",
-			"rounds": [],
-			"players": [],
-			"time_control": "efezr",
-			"description": "ezrfe"
-		},
-		"8": {
-			"name": "sggfs",
-			"place": "grsfg",
-			"tourn_date": "{TinyDate}:2021-08-17T17:05:25.752937",
-			"rounds": [],
-			"players": [],
-			"time_control": "gfsr",
-			"description": "rsrs"
-		},
-		"9": {
-			"name": "rfret",
-			"place": "erter",
-			"tourn_date": "{TinyDate}:2021-08-17T17:06:53.188768",
-			"rounds": [],
-			"players": [],
-			"time_control": "er",
-			"description": "ter"
-		},
-		"10": {
-			"name": "erer",
-			"place": "trret",
-			"tourn_date": "{TinyDate}:2021-08-17T17:07:17.666841",
-			"rounds": [],
-			"players": [],
-			"time_control": "er",
-			"description": "ertrete"
-		},
-		"11": {
-			"name": "erg",
-			"place": "ter",
-			"tourn_date": "{TinyDate}:2021-08-17T17:25:31.696707",
-			"rounds": [],
-			"players": [],
-			"time_control": "erte",
-			"description": "erte"
-		},
-		"12": {
-			"name": "aaa",
-			"place": "aaa",
-			"tourn_date": "{TinyDate}:2021-08-17T17:33:20.595981",
-			"rounds": [],
-			"players": [],
-			"time_control": "aaa",
-			"description": "aaaa"
-		},
-		"13": {
-			"name": "xxxx",
-			"place": "xxxx",
-			"tourn_date": "{TinyDate}:2021-08-17T18:22:54.675524",
-			"rounds": [],
-			"players": [],
-			"time_control": "xxxx",
-			"description": "xxxx"
-		},
-		"14": {
-			"name": "rtrezt",
-			"place": "zretez",
-			"tourn_date": "{TinyDate}:2021-08-17T18:36:37.017777",
-			"rounds": [],
-			"players": [],
-			"time_control": "ertre",
-			"description": "ertre"
-		},
-		"15": {
-			"name": "eee",
-			"place": "eee",
-			"tourn_date": "{TinyDate}:2021-08-17T18:37:59.616491",
-			"rounds": [],
-			"players": "eee",
-			"time_control": "eee",
-			"description": "eee"
-		},
-		"16": {
-			"name": "sss",
-			"place": "sss",
-			"tourn_date": "{TinyDate}:2021-08-17T18:54:10.186827",
-			"rounds": [],
-			"players": [],
-			"time_control": "sss",
-			"description": "sss"
-		},
-		"17": {
-			"name": "sss",
-			"place": "sss",
-			"tourn_date": "{TinyDate}:2021-08-17T19:10:22.908042",
-			"rounds": [],
-			"players": [],
-			"time_control": "sss",
-			"description": "sss"
-		},
-		"18": {
-			"name": "dddd",
-			"place": "dddd",
-			"tourn_date": "{TinyDate}:2021-08-17T19:13:51.484106",
-			"rounds": [],
-			"players": 14,
-			"time_control": "dddd",
-			"description": "ddd"
-		}
-	},
-	"player": {
-		"1": {
-			"name": "t",
-			"last_name": "t",
-			"birth_date": "31/01/1990",
-			"sex": "M",
-			"ranking": 0
-		},
-		"2": {
-			"name": "seezrze",
-			"last_name": "zerz",
-			"birth_date": "12/11/1234",
-			"sex": "df",
-			"ranking": 0
-		},
-		"3": {
-			"name": "tyryr",
-			"last_name": "utrutr",
-			"birth_date": "22/09/1999",
-			"sex": "i",
-			"ranking": 0
-		},
-		"4": {
-			"name": "tstr",
-			"last_name": "rst",
-			"birth_date": "23/04/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"5": {
-			"name": "sefes",
-			"last_name": "efes",
-			"birth_date": "23/02/1999",
-			"sex": "M",
-			"ranking": 0
-		},
-		"6": {
-			"name": "sdf",
-			"last_name": "sfd",
-			"birth_date": "12/02/1999",
-			"sex": "M",
-			"ranking": 0
-		},
-		"7": {
-			"name": "srtr",
-			"last_name": "ter",
-			"birth_date": "12/02/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"8": {
-			"name": "aaa",
-			"last_name": "aaaa",
-			"birth_date": "12/02/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"9": {
-			"name": "xxxx",
-			"last_name": "xxxxx",
-			"birth_date": "12/02/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"10": {
-			"name": "zzz",
-			"last_name": "zzzz",
-			"birth_date": "12/02/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"11": {
-			"name": "eee",
-			"last_name": "eee",
-			"birth_date": "12/09/1999",
-			"sex": "M",
-			"ranking": 0
-		},
-		"12": {
-			"name": "ssss",
-			"last_name": "ssss",
-			"birth_date": "12/02/2000",
-			"sex": "M",
-			"ranking": 0
-		},
-		"13": {
-			"name": "sss",
-			"last_name": "sss",
-			"birth_date": "12/02/1999",
-			"sex": "M",
-			"ranking": 0
-		},
-		"14": {
-			"name": "ddd",
-			"last_name": "ddd",
-			"birth_date": "10/10/1999",
-			"sex": "M",
-			"ranking": 0
-		}
-	}
+    "tournament": {
+        "1": {
+            "name": "dddd",
+            "place": "dddd",
+            "tourn_date": "{TinyDate}:2021-08-19T22:54:14.646558",
+            "rounds": [],
+            "players": 1,
+            "time_control": "dddd",
+            "description": "dddd"
+        },
+        "2": {
+            "name": "klklk",
+            "place": "llkkl",
+            "tourn_date": "{TinyDate}:2021-08-22T20:22:40.533618",
+            "rounds": [],
+            "players": [],
+            "time_control": "kl,kl,",
+            "description": "jknjkn"
+        },
+        "3": {
+            "name": "fzefzr",
+            "place": "zrzrtzr",
+            "tourn_date": "{TinyDate}:2021-08-24T15:18:15.484824",
+            "rounds": [],
+            "players": [],
+            "time_control": "sdfs",
+            "description": " Blitz"
+        }
+    },
+    "player": {
+        "1": {
+            "name": "dddd",
+            "last_name": "dddd",
+            "birth_date": "12/12/2000",
+            "sex": "M",
+            "ranking": 0
+        }
+    }
 }

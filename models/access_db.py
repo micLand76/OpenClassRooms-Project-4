@@ -10,7 +10,7 @@ class DbManag:
     serialization = SerializationMiddleware(JSONStorage)
     serialization.register_serializer(DateTimeSerializer(), 'TinyDate')
 
-    db = TinyDB('db.json', storage=serialization)
+    db = TinyDB('db.json', storage=serialization, indent=4)
     User = Query()
 
     def connect_db(self):
