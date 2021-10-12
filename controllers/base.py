@@ -1,10 +1,4 @@
-
-
 from controllers.menu_management import HomeMenuController
-from models.tournament import Tournament
-from models.player import Player
-from views.tournament_view import TournamentView
-from views.player_view import PlayerView
 
 
 class Controller:

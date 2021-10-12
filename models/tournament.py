@@ -26,9 +26,8 @@ class Tournament:
         self.tour_number = tour_number
         self.time_control = time_control
         self.description = description
-        self.rounds = name
-        self.players = []
         self.rounds = []
+        self.players = []
 
     def serializ_tournament(self) -> dict:
         return {'name': self.name,
@@ -42,6 +41,13 @@ class Tournament:
     def insert_tournament(self, tournament_serializ):
         self.tournament.insert(tournament_serializ)
 
+    def update_tournament(self, id_tournament: list, value):
+        # il faut ajouter à une liste et non comme une chaine
+        # val = ''.join(value[i] + ', ' for i in range(len(value)))
+        # for i in range(len(value)):
+            # self.players.append(value[i])
+        self.tournament.update({'players': self.players}, doc_ids=id_tournament)
+
     def search_id_tournament(self, field='name', value=''):
         """ search the id of the tournament by giving a value of a field """
         results = self.tournament.search(where(field) == value)  # returns a list
@@ -51,5 +57,32 @@ class Tournament:
     def search_tournament_by_id(self, value=1) -> str:
         return 'le tournoi ' + str(self.tournament.get(doc_id=value))
 
-    def update_tournament(self, id_tournament='', field='name', value=''):
+    def change_tournament(self, id_tournament='', field='name', value=''):
         self.tournament.update({field: value}, doc_ids=[id_tournament])
+
+    def add_player_tournament(self, id_tournament='', value=''):
+        self.tournament.update({'name': value}, doc_ids=[id_tournament])
+        self.players.append(value)
+
+    def display_all_table(self):
+        all_tournaments = self.tournament.all()
+        nb_tournaments = len(self.tournament)
+        return ''.join('Tournoi ' + str(self.search_id_tournament('name', all_tournaments[i].get('name'))) + ' ' +
+                       all_tournaments[i].get('name') + " (" + all_tournaments[i].get('place') + ") \n"
+                       for i in range(nb_tournaments))
+
+    def display_all_tournaments(self):
+        all_tournaments = self.tournament.all()
+        nb_tournaments = len(self.tournament)
+        return ''.join(str(all_tournaments[i].get('name')).capitalize().ljust(15) +
+                       str(all_tournaments[i].get('place')).capitalize().ljust(14) +
+                       str(all_tournaments[i].get('tourn_date').strftime('%Y-%m-%d')).ljust(14) +
+                       str(all_tournaments[i].get('rounds')[0]).ljust(14) +
+                       str(all_tournaments[i].get('time_control')).capitalize().ljust(20) +
+                       str(all_tournaments[i].get('description')).capitalize().ljust(20) + "\n"
+                       for i in range(nb_tournaments))
+
+    def return_players(self, id_tournament: int) -> list:
+        all_tournaments = self.tournament.all()
+        return list(all_tournaments[id_tournament-1].get('players'))
+

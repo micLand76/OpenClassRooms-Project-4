@@ -1,10 +1,12 @@
 from models.access_db import DbManag
 from tinydb import TinyDB, where
+from operator import itemgetter, attrgetter
 
 
 class Player:
     """ Class to create a Player with his attributes and to give his rank"""
     player = DbManag.db.table('player')
+    number_of_player = 0
 
     def __init__(self, name='', last_name='', birth_date='', sex='M'):
         self.name = name
@@ -26,6 +28,9 @@ class Player:
     def insert_player(self, player_serializ):
         self.player.insert(player_serializ)
 
+    def number_of_players(self) -> int:
+        return len(self.player)
+
     def search_player(self, field='name', value=''):
         """ to find data by giving the field and a value """
         return DbManag.search_data(self.player, field, value)
@@ -37,7 +42,70 @@ class Player:
             return res.doc_id
 
     def search_player_by_id(self, value=1) -> str:
-        return 'le joueur ' + str(self.player.get(doc_id=value))
+        data_player = self.player.get(doc_id=value)
+        return (
+            str(value).ljust(4)
+            + ' '
+            + str(data_player['name']).capitalize().ljust(15)
+            + ' '
+            + str(data_player['last_name']).capitalize().ljust(15)
+            + ' '
+            + str(data_player['birth_date']).ljust(14)
+            + ' '
+            + str(data_player['sex']).ljust(4)
+            + ' '
+            + str(data_player['ranking']).ljust(4)
+        )
+
+    def search_instance_player_by_id(self, value=1):
+        data_player = self.player.get(doc_id=value)
+        player = Player(data_player['name'], data_player['last_name'], data_player['birth_date'], data_player['sex'])
+        player.rank = data_player['ranking']
+        return {'name': player.name,
+                'last_name': player.last_name,
+                'birth_date': player.birth_date,
+                'sex': player.sex,
+                'ranking': player.rank}
+        # return playerInst # self.player.get(doc_id=value)
 
     def update_player(self, id_player='', field='name', value=''):
         self.player.update({field: value}, DbManag.User.id_player == id_player)
+
+    def display_all_table(self):
+        all_players = self.player.all()
+        nb_players = len(self.player)
+        return ''.join('Joueur ' + str(self.search_id_player('name', all_players[i].get('name'))) + ' ' +
+                       all_players[i].get('last_name') + " " + all_players[i].get('name') + " \n"
+                       for i in range(nb_players-1))
+
+    def display_all_table_all_data(self, sorting_order=1):
+        if sorting_order == 1:
+            all_players = sorted(self.player.all(), key=lambda k: k['name'].capitalize())
+        else:
+            all_players = sorted(self.player.all(), key=lambda k: k['ranking'], reverse=True)
+        nb_players = len(self.player)
+        return ''.join(str(self.search_id_player("name", all_players[i].get("name"))).ljust(4) + ' ' +
+                       all_players[i].get("last_name").capitalize().ljust(15) + " " +
+                       all_players[i].get("name").capitalize().ljust(15) + " " +
+                       str(all_players[i].get("birth_date")).ljust(14) + " " +
+                       all_players[i].get("sex").ljust(4) + " " +
+                       str(all_players[i].get("ranking")).ljust(4) + " \n"
+                       for i in range(nb_players))
+
+    def display_all_table_all_data_for_tournament(self, list_players: list, sorting_order=1):
+        nb_players = len(list_players)
+        instance_players = []
+        for i in range(nb_players):
+            instance_players.append(self.search_instance_player_by_id(list_players[i]))
+        if sorting_order == 1:
+            all_players = sorted(instance_players, key=lambda k: k['name'].capitalize())
+        else:
+            all_players = sorted(instance_players, key=lambda k: k['ranking'], reverse=True)
+        player_list = ''
+        for i in range(nb_players):
+            player_list += all_players[i]["last_name"].capitalize().ljust(15) + " " + \
+                           all_players[i]["name"].capitalize().ljust(15) + " " + \
+                           str(all_players[i]["birth_date"]).ljust(14) + " " + \
+                           all_players[i]["sex"].ljust(4) + " " + \
+                           str(all_players[i]["ranking"]).ljust(4) + " \n"
+        return player_list

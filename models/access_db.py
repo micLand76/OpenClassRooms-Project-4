@@ -2,7 +2,6 @@ from tinydb import TinyDB, Query, where
 from tinydb.storages import JSONStorage
 from tinydb_serialization import SerializationMiddleware
 from tinydb_serialization.serializers import DateTimeSerializer
-from datetime import datetime
 
 
 class DbManag:
@@ -20,4 +19,5 @@ class DbManag:
         self.db.close()
 
     def search_data(self, field='name', value=''):
-        return self.search(where(field) == value)
+        return self.db.search(where(field) == value)
+
