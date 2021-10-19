@@ -7,7 +7,8 @@ class Round:
         It allows also to generate pairs of players with the Swiss method"""
     round = DbManag.db.table('round')
 
-    def __init__(self, name, data_hour_start, data_hour_end='00:00'):
+    def __init__(self, tournament, name, data_hour_start, data_hour_end='00:00'):
+        self.tournament = tournament
         self.name = name
         self.data_hour_start = data_hour_start
         self.data_hour_end = data_hour_end
@@ -16,7 +17,8 @@ class Round:
         self.result = None
 
     def serializ_round(self) -> dict:
-        return {'name': self.name,
+        return {'tournament': self.tournament,
+                'name': self.name,
                 'data_hour_start': self.data_hour_start,
                 'data_hour_end': self.data_hour_end,
                 'match': self.match,

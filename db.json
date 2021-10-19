@@ -85,10 +85,43 @@
             "name": "Tournoi Jeunes",
             "place": "Marseille",
             "tourn_date": "{TinyDate}:2021-10-12T20:24:10.489994",
-            "rounds": [4],
+            "rounds": [
+                2
+            ],
             "players": [],
             "time_control": "bullet",
             "description": "tournoi entre les jeunes de Marseille et de Paris"
+        },
+        "8": {
+            "name": "Tournoi Senior",
+            "place": "Paris",
+            "tourn_date": "{TinyDate}:2021-10-18T20:59:13.380046",
+            "rounds": [
+                1
+            ],
+            "players": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            ],
+            "time_control": "bullet",
+            "description": "tournoi pour les plus de 60 ans"
+        },
+        "9": {
+            "name": "Tournoi de test",
+            "place": "Lyon",
+            "tourn_date": "{TinyDate}:2021-10-18T21:19:24.499923",
+            "rounds": [
+                1
+            ],
+            "players": [],
+            "time_control": "blitz",
+            "description": "tournoi test"
         }
     },
     "player": {
@@ -165,8 +198,9 @@
     },
     "round": {
         "1": {
+            "tournament": 8,
             "name": 1,
-            "data_hour_start": "{TinyDate}:2021-09-30T18:41:55.000229",
+            "data_hour_start": "{TinyDate}:2021-10-18T21:31:48.261886",
             "data_hour_end": "",
             "match": 0,
             "pairs": [
@@ -177,21 +211,25 @@
                 [
                     5,
                     4
+                ],
+                [
+                    7,
+                    6
+                ],
+                [
+                    9,
+                    8
                 ]
             ],
             "result": 0
         },
         "2": {
-            "name": 1,
-            "data_hour_start": "{TinyDate}:2021-10-01T09:23:01.257159",
+            "tournament": "7",
+            "name": 2,
+            "data_hour_start": "{TinyDate}:2021-10-18T21:33:27.587748",
             "data_hour_end": "",
             "match": 0,
-            "pairs": [
-                [
-                    2,
-                    1
-                ]
-            ],
+            "pairs": [],
             "result": 0
         }
     }

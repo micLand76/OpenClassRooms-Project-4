@@ -66,8 +66,7 @@ class TournamentCreate:
         and insert them into the Tinydb table Tournament """
         input_tournament = []
         questions_tournament = [self.tournament_view.quest_name, self.tournament_view.quest_place,
-                                self.tournament_view.quest_desc, self.tournament_view.quest_ctrl,
-                                self.tournament_view.quest_nb_round]
+                                self.tournament_view.quest_desc, self.tournament_view.quest_ctrl]
         for quest in questions_tournament:
             good_answer = False
             self.tournament_view.tournament_ask(quest)
@@ -76,8 +75,8 @@ class TournamentCreate:
                 answer = input('>> ')
                 if self.is_answer_empty(answer) is True:
                     print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
-                elif quest == self.tournament_view.quest_nb_round and self.is_numeric(answer) is False:
-                    print('Vous n\'avez pas saisi un entier pour le nombre de rounds.')
+                # elif quest == self.tournament_view.quest_nb_round and self.is_numeric(answer) is False:
+                    # print('Vous n\'avez pas saisi un entier pour le nombre de rounds.')
                 elif quest == self.tournament_view.quest_ctrl and self.is_good_value_time_control(answer) is False:
                     print('Vous ne pouvez saisir qu\'une des trois valeurs suivantes:',
                           'bullet, blitz ou coup rapide.')
@@ -85,6 +84,7 @@ class TournamentCreate:
                     good_answer = True
             input_tournament.append(answer)
         self.tournament = Tournament(*input_tournament)
+        self.tournament.rounds.append(1)
         self.tournament.insert_tournament(self.tournament.serializ_tournament())
         self.tournament_id = self.tournament.search_id_tournament('name', self.tournament.name)
         return TournamentMenuController
@@ -128,7 +128,7 @@ class AssociatePlayersController:
 
         number_of_players = self.player.number_of_players()
         number_of_player_round = 8
-        print("number_of_players = " + str(number_of_players))
+        print("nombre total de joueurs = " + str(number_of_players))
 
         number_of_players = min(number_of_players, number_of_player_round)
         list_players_selected = []
@@ -136,12 +136,12 @@ class AssociatePlayersController:
         while i < number_of_players:
             print('Veuillez saisir le n° du joueur que vous voulez associer pour le tournoi. ')
             self.player_id = int(input())
-            print(i)
             """ manage the case of selecting twice the same player """
             if self.player_id in list_players_selected:
                 print('Vous avez déjà sélectionné ce joueur')
             else:
-                # il faut ajouter les nouveaux players aux anciens, déjà associés auparavant
+                # il faut ajouter les nouveaux players aux anciens, déjà associés
+                # auparavant mais pour l'instant on enregistre les 8 joueurs une fois pour toutes
                 list_players_selected.append(self.player_id)
                 self.update_players_tournament()
                 i += 1
@@ -158,10 +158,6 @@ class AssociatePlayersController:
 
 
 class EnterResultsController:
-    pass
-
-
-class PairGenerateController:
     def __init__(self):
         self.player = Player()
         self.tournament = Tournament('', '', '')
@@ -176,12 +172,33 @@ class PairGenerateController:
         self.generate_pairs(list_players_tournament)
         return TournamentMenuController
 
+
+class PairGenerateController:
+    def __init__(self):
+        self.player = Player()
+        self.tournament = Tournament('', '', '')
+        self.round = Round('', '', datetime.now())
+        self.tournament_id = 0
+        self.player_id = 0
+
+    def __call__(self):
+        print(self.tournament.display_all_table())
+        self.tournament_id = input('Pour quel tournoi voulez-vous générer les paires de joueurs (saisir le n°) ? ')
+        # tester si le tournoi a bien au moins 8 joueurs d'enregistré
+        self.round.tournament = self.tournament_id
+        self.round.name = self.tournament.return_last_round(self.tournament_id)
+        list_players_tournament = self.tournament.return_players(int(self.tournament_id))
+        self.generate_pairs(list_players_tournament)
+        return TournamentMenuController
+
     def generate_pairs(self, list_players_tournament: list):
-        for i in range(1, len(list_players_tournament), 2):
-            players_couple: tuple = (list_players_tournament[i], list_players_tournament[i - 1])
-            self.round.pairs.append(players_couple)
+        if self.round.name == 1:
+            for i in range(1, len(list_players_tournament), 2):
+                players_couple: tuple = (list_players_tournament[i], list_players_tournament[i - 1])
+                self.round.pairs.append(players_couple)
+        else:
+            pass
         print(self.round.pairs)
-        self.round.name = 1
         self.round.data_hour_start = datetime.now()
         self.round.match = 0
         self.round.result = 0

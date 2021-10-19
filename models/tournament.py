@@ -86,3 +86,7 @@ class Tournament:
         all_tournaments = self.tournament.all()
         return list(all_tournaments[id_tournament-1].get('players'))
 
+    def return_last_round(self, id_tournament: int) -> int:
+        all_tournaments = self.tournament.all()
+        last_round = all_tournaments[int(id_tournament)-1].get('rounds')
+        return int(last_round[0])
