@@ -3,13 +3,13 @@ from itertools import chain
 
 def pair_already_played(list_players: list, pair_players: tuple, test_already_apaired: True):
     """ verify that this combination isn't already existing """
-    old_list = [(2, 11), (5, 1), (34, 8), (9, 3)]
     if player_already_apaired(list_players, pair_players) is True:
         if test_already_apaired is True:
             return True
         else:
             return pair_players
     else:
+        old_list = [(2, 11), (5, 1), (34, 8), (9, 3)]
         return any(old_list[j] in [pair_players, pair_players[::-1]] for j in range(4))
 
 
@@ -49,12 +49,6 @@ while i < number_tours:
                     pairs.clear()
                     break
             break
-            """ find the player who was associated with the player which is now associate with the player 3 """
-            """result = list(filter(lambda x: x[1] == return_pair_already_played[1], pairs))
-            for p in range(3):
-                if pairs[p][0] == result[0]:
-                    print('pair', p)
-                    break"""
 
     pairs.append(players_couple)
     i += 1
