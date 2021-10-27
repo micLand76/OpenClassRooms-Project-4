@@ -45,8 +45,11 @@ class Tournament:
         # il faut ajouter à une liste et non comme une chaine
         # val = ''.join(value[i] + ', ' for i in range(len(value)))
         # for i in range(len(value)):
-            # self.players.append(value[i])
+        # self.players.append(value[i])
         self.tournament.update({'players': self.players}, doc_ids=id_tournament)
+
+    def update_tournament_round(self, id_tournament: int, value: list):
+        self.tournament.update({'rounds': value}, doc_ids=[id_tournament])
 
     def search_id_tournament(self, field='name', value=''):
         """ search the id of the tournament by giving a value of a field """
@@ -54,24 +57,24 @@ class Tournament:
         for res in results:
             return res.doc_id
 
-    def search_tournament_by_id(self, value=1) -> str:
-        return 'le tournoi ' + str(self.tournament.get(doc_id=value))
-
-    def change_tournament(self, id_tournament='', field='name', value=''):
-        self.tournament.update({field: value}, doc_ids=[id_tournament])
-
-    def add_player_tournament(self, id_tournament='', value=''):
-        self.tournament.update({'name': value}, doc_ids=[id_tournament])
-        self.players.append(value)
-
-    def display_all_table(self):
+    def display_all_table(self) -> str:
         all_tournaments = self.tournament.all()
         nb_tournaments = len(self.tournament)
         return ''.join('Tournoi ' + str(self.search_id_tournament('name', all_tournaments[i].get('name'))) + ' ' +
                        all_tournaments[i].get('name') + " (" + all_tournaments[i].get('place') + ") \n"
                        for i in range(nb_tournaments))
 
-    def display_all_tournaments(self):
+    def display_all_table_with_players(self) -> str:
+        all_tournaments = self.tournament.all()
+        list_tournaments = ''
+        for id_tournament in all_tournaments:
+            nb_players: list = id_tournament.get('players')
+            if len(nb_players) == 8:
+                list_tournaments += 'Tournoi ' + str(self.search_id_tournament('name', id_tournament.get('name'))) + \
+                                    ' ' + id_tournament.get('name') + " (" + id_tournament.get('place') + ") \n"
+        return list_tournaments
+
+    def display_all_tournaments(self) -> str:
         all_tournaments = self.tournament.all()
         nb_tournaments = len(self.tournament)
         return ''.join(str(all_tournaments[i].get('name')).capitalize().ljust(15) +
@@ -84,9 +87,14 @@ class Tournament:
 
     def return_players(self, id_tournament: int) -> list:
         all_tournaments = self.tournament.all()
-        return list(all_tournaments[id_tournament-1].get('players'))
+        return list(all_tournaments[id_tournament - 1].get('players'))
 
-    def return_last_round(self, id_tournament: int) -> int:
+    def return_nb_players_per_tournament(self, id_tournament: int) -> int:
+        data_tournament = self.tournament.get(doc_id=id_tournament)
+        nb_players: list = data_tournament['players']
+        return len(nb_players)
+
+    def return_rounds(self, id_tournament: int) -> list:
         all_tournaments = self.tournament.all()
-        last_round = all_tournaments[int(id_tournament)-1].get('rounds')
-        return int(last_round[0])
+        last_round: list = all_tournaments[int(id_tournament) - 1]['rounds']
+        return last_round

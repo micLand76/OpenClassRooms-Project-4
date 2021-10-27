@@ -15,9 +15,6 @@ class Player:
         self.sex = sex
         self.rank = 0
 
-    def update_ranking(self, rank):
-        self.rank = rank
-
     def serializ_player(self) -> dict:
         return {'name': self.name,
                 'last_name': self.last_name,
@@ -31,31 +28,15 @@ class Player:
     def number_of_players(self) -> int:
         return len(self.player)
 
-    def search_player(self, field='name', value=''):
-        """ to find data by giving the field and a value """
-        return DbManag.search_data(self.player, field, value)
+    def return_player_ranking(self, player_id: int) -> dict:
+        data_player = self.player.get(doc_id=player_id)
+        return {'id': player_id, 'rank': data_player['ranking']}
 
     def search_id_player(self, field='name', value=''):
         """ search the id of the player by giving a value of a field """
         results = self.player.search(where(field) == value)  # returns a list
         for res in results:
             return res.doc_id
-
-    def search_player_by_id(self, value=1) -> str:
-        data_player = self.player.get(doc_id=value)
-        return (
-            str(value).ljust(4)
-            + ' '
-            + str(data_player['name']).capitalize().ljust(15)
-            + ' '
-            + str(data_player['last_name']).capitalize().ljust(15)
-            + ' '
-            + str(data_player['birth_date']).ljust(14)
-            + ' '
-            + str(data_player['sex']).ljust(4)
-            + ' '
-            + str(data_player['ranking']).ljust(4)
-        )
 
     def search_instance_player_by_id(self, value=1):
         data_player = self.player.get(doc_id=value)
@@ -66,10 +47,6 @@ class Player:
                 'birth_date': player.birth_date,
                 'sex': player.sex,
                 'ranking': player.rank}
-        # return playerInst # self.player.get(doc_id=value)
-
-    def update_player(self, id_player='', field='name', value=''):
-        self.player.update({field: value}, DbManag.User.id_player == id_player)
 
     def display_all_table(self):
         all_players = self.player.all()
@@ -82,7 +59,7 @@ class Player:
         if sorting_order == 1:
             all_players = sorted(self.player.all(), key=lambda k: k['name'].capitalize())
         else:
-            all_players = sorted(self.player.all(), key=lambda k: k['ranking'], reverse=True)
+            all_players = sorted(self.player.all(), key=lambda k: (k['ranking'] == 0, k['ranking']))
         nb_players = len(self.player)
         return ''.join(str(self.search_id_player("name", all_players[i].get("name"))).ljust(4) + ' ' +
                        all_players[i].get("last_name").capitalize().ljust(15) + " " +
@@ -100,7 +77,7 @@ class Player:
         if sorting_order == 1:
             all_players = sorted(instance_players, key=lambda k: k['name'].capitalize())
         else:
-            all_players = sorted(instance_players, key=lambda k: k['ranking'], reverse=True)
+            all_players = sorted(instance_players, key=lambda k: (k['ranking'] == 0, k['ranking']))
         player_list = ''
         for i in range(nb_players):
             player_list += all_players[i]["last_name"].capitalize().ljust(15) + " " + \

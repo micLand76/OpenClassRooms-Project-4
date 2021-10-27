@@ -7,8 +7,8 @@ class PlayerView:
         self.quest_sex = 'Veuillez saisir le sexe du joueur '
 
     @staticmethod
-    def player_ask(quest, player) -> None:
-        print(f"{quest} {player} : ")
+    def player_ask(quest) -> None:
+        print(f"{quest} : ")
 
     @staticmethod
     def display_player():
