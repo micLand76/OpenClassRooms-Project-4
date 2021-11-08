@@ -1,6 +1,6 @@
 from datetime import datetime
-from operator import itemgetter, attrgetter
 
+from models.access_db import DbManag
 from models.match import Match
 from models.menu import Menu
 from models.player import Player
@@ -24,7 +24,6 @@ class HomeMenuController:
         self.menu.clear()
         self.menu.add("auto", "Tournois", TournamentMenuController)
         self.menu.add("auto", "Joueurs", PlayersMenuController)
-        self.menu.add("auto", "Classement", RankingMenuController)
         self.menu.add("auto", "Rapports", ReportMenuController)
         self.menu.add("q", "Quitter", ExitMenuController)
 
@@ -45,9 +44,9 @@ class TournamentMenuController:
         self.menu.clear()
         self.menu.add("auto", "Créer", TournamentCreate)
         self.menu.add("auto", "Associer des Joueurs", AssociatePlayersController)
-        self.menu.add("auto", "Consulter", PlayersMenuController)
         self.menu.add("auto", "Génération des Paires", PairGenerateController)
         self.menu.add("auto", "Saisi des Résultats", EnterResultsController)
+        self.menu.add("auto", "Suppression des Tournois", DeleteTournamentController)
         self.menu.add("r", "Retour", HomeMenuController)
 
         user_choice = self.view.get_user_choice("Tournoi")
@@ -83,7 +82,7 @@ class TournamentCreate:
                     good_answer = True
             input_tournament.append(answer)
         self.tournament = Tournament(*input_tournament)
-        self.tournament.rounds.append(1)
+        self.tournament.rounds.append(0)
         self.tournament.insert_tournament(self.tournament.serializ_tournament())
         self.tournament_id = self.tournament.search_id_tournament('name', self.tournament.name)
         return TournamentMenuController
@@ -157,6 +156,74 @@ class AssociatePlayersController:
         self.tournament.update_tournament([int(self.tournament_id)], self.tournament.players)
 
 
+class PairGenerateController:
+    def __init__(self):
+        self.player = Player()
+        self.tournament = Tournament('', '', '')
+        self.round = Round('', '', datetime.now())
+        self.tournament_id = 0
+        self.player_id = 0
+        self.round_id = 0
+
+    def __call__(self):
+        list_tournaments = self.tournament.display_all_table_with_players()
+        if list_tournaments == '':
+            print('Vous n\'avez associé 8 joueurs à aucun tournoi')
+        else:
+            print(list_tournaments)
+            self.tournament_id = int(
+                input('Pour quel tournoi voulez-vous générer les paires de joueurs (saisir le n°) ? '))
+            """ confirm that the last round is finish before created a new one """
+            self.round.tournament = self.tournament_id
+            self.round.name = self.tournament.return_rounds(self.tournament_id)[-1]
+            self.round_id = self.round.search_id_round('tournament', self.tournament_id)
+            if self.round.round_closed(self.round_id) is True:
+                if len(self.tournament.return_rounds(self.tournament_id)) < 4:
+                    """ if there were already 4 rounds played, we forbid to create a new round """
+                    list_players_tournament = self.tournament.return_players(self.tournament_id)
+                    list_player = []
+                    for player in list_players_tournament:
+                        """ for the first round, we generate pairs based on the rank
+                        for the next rounds, it's based on the points of the players """
+                        if len(self.tournament.return_rounds(self.tournament_id)) == 0:
+                            list_player.append(self.player.return_player_ranking(player))
+                        else:
+                            list_player.append(self.round.return_total_points_player_tournament(self.tournament_id,
+                                                                                                player))
+                    self.tournament.rounds = self.tournament.return_rounds(self.tournament_id)
+                    if self.tournament.rounds[-1] == 0:
+                        self.tournament.rounds = []
+                    self.tournament.rounds.append(int(self.round.name) + 1)
+                    self.tournament.update_tournament_round(self.tournament_id, self.tournament.rounds)
+                    if len(self.tournament.return_rounds(self.tournament_id)) == 1:
+                        self.generate_pairs(list_players_tournament, list_player, False)
+                    else:
+                        self.generate_pairs(list_players_tournament, list_player, True)
+                else:
+                    print("Le tournoi est terminé. Vous ne pouvez plus créer de nouveau round.")
+            else:
+                print("Vous n'avez pas saisi tous les résultats des matchs pour le round en cours, vous ne pouvez pas "
+                      "en créer un nouveau.")
+        return TournamentMenuController
+
+    def generate_pairs(self, list_players_tournament: list, list_player: list, sort_sens: bool = False):
+        if self.round.name == 0:
+            for i in range(1, len(list_players_tournament), 2):
+                players_couple: tuple = (list_players_tournament[i], list_players_tournament[i - 1])
+                self.round.pairs.append(players_couple)
+        else:
+            old_list_players: list = self.round.return_old_pairs(self.round_id)
+            print('old_list_players', old_list_players)
+            self.round.pairs.extend(self.round.generate_pair(list_player, old_list_players, sort_sens))
+        print(self.round.pairs)
+        self.round.name += 1
+        self.round.data_hour_start = datetime.now()
+        self.round.match = 0
+        self.round.result = 0
+        self.round.data_hour_end = ''
+        self.round.insert_round(self.round.serializ_round())
+
+
 class EnterResultsController:
     def __init__(self):
         self.player = Player()
@@ -183,19 +250,22 @@ class EnterResultsController:
             list_players: list = self.round.return_old_pairs(self.round_id)
             if len(list_players) == 4:
                 print(list_players)
-                player_score = int(input("Pour quel paire de joueurs voulez-vous saisir les points (1, 2, 3 ou 4) ? \n"))
+                player_score: int = 0
+                while player_score < 1 or player_score > 4:
+                    player_score = int(
+                        input("Pour quel paire de joueurs voulez-vous saisir les points (1, 2, 3 ou 4) ? \n"))
                 match_already = self.match.search_match('id_tournament', self.tournament_id)
                 for m_already in match_already:
                     if (m_already['player_1'], m_already['player_2']) == \
-                            (list_players[player_score-1][0], list_players[player_score-1][1]) and \
+                            (list_players[player_score - 1][0], list_players[player_score - 1][1]) and \
                             m_already['round_name'] == self.round_name:
                         print('Vous avez déjà indiqué le gagnant de ce match')
                         return TournamentMenuController
                 winner = int(input("Qui est le gagant du match (n° du joueur ou 0 si match nul) ? \n "))
                 self.match.id_tournament = self.tournament_id
                 self.match.round_name = self.round_name
-                self.match.player_1 = list_players[player_score-1][0]
-                self.match.player_2 = list_players[player_score-1][1]
+                self.match.player_1 = list_players[player_score - 1][0]
+                self.match.player_2 = list_players[player_score - 1][1]
                 self.match.attribut_points(winner)
                 self.match.insert_match()
                 round_matchs = self.match.search_id_match('id_tournament', self.match.id_tournament)
@@ -211,56 +281,31 @@ class EnterResultsController:
         return TournamentMenuController
 
 
-class PairGenerateController:
+class DeleteTournamentController:
     def __init__(self):
-        self.player = Player()
-        self.tournament = Tournament('', '', '')
-        self.round = Round('', '', datetime.now())
-        self.tournament_id = 0
-        self.player_id = 0
-        self.round_id = 0
+        """ we add the tournament view and tournament model to the controller """
+        self.tournament = Tournament("", "", "")
+        self.round = Round("", "", "")
+        self.match = Match("", "", "", "", "", "")
 
     def __call__(self):
-        list_tournaments = self.tournament.display_all_table_with_players()
-        if list_tournaments == '':
-            print('Vous n\'avez associé 8 joueurs à aucun tournoi')
+        id_tournament: int = 0
+        choice_deleting_tournament = int(input('Voulez-vous supprimer tous les tournois (choix 1) ou un tournoi '
+                                               'précis (choix 2) ?'))
+        if choice_deleting_tournament == 1:
+            DbManag.db.drop_table('tournament')
+            DbManag.db.drop_table('round')
+            DbManag.db.drop_table('match')
         else:
-            print(list_tournaments)
-            self.tournament_id = int(
-                input('Pour quel tournoi voulez-vous générer les paires de joueurs (saisir le n°) ? '))
-            """ confirm that the last round is finish before created a new one """
-            self.round.tournament = self.tournament_id
-            self.round.name = self.tournament.return_rounds(self.tournament_id)[-1]
-            self.round_id = self.round.search_id_round('tournament', self.tournament_id)
-            if self.round.round_closed(self.round_id) is True:
-                list_players_tournament = self.tournament.return_players(self.tournament_id)
-                list_player = []
-                for player in list_players_tournament:
-                    list_player.append(self.player.return_player_ranking(player))
-                self.tournament.rounds = self.tournament.return_rounds(self.tournament_id)
-                self.tournament.rounds.append(int(self.round.name) + 1)
-                self.tournament.update_tournament_round(self.tournament_id, self.tournament.rounds)
-                self.generate_pairs(list_players_tournament, list_player)
-            else:
-                print("Vous n'avez pas saisi tous les résultats des matchs pour le round en cours, vous ne pouvez pas "
-                      "en créer un nouveau.")
+            print(self.tournament.display_all_table())
+            try:
+                id_tournament = int(input('Quel tournoi voulez-vous supprimer (saisir le n°) ?'))
+                self.tournament.delete_tournament(id_tournament)
+                self.round.delete_round(id_tournament)
+                self.match.delete_match(id_tournament)
+            except:
+                TournamentMenuController()
         return TournamentMenuController
-
-    def generate_pairs(self, list_players_tournament: list, list_player: list):
-        if self.round.name == 1:
-            for i in range(1, len(list_players_tournament), 2):
-                players_couple: tuple = (list_players_tournament[i], list_players_tournament[i - 1])
-                self.round.pairs.append(players_couple)
-        else:
-            old_list_players: list = self.round.return_old_pairs(self.round_id)
-            print('old_list_players', old_list_players)
-            self.round.pairs.extend(self.round.generate_pair(list_player, old_list_players))
-        print(self.round.pairs)
-        self.round.data_hour_start = datetime.now()
-        self.round.match = 0
-        self.round.result = 0
-        self.round.data_hour_end = ''
-        self.round.insert_round(self.round.serializ_round())
 
 
 class PlayersMenuController:
@@ -271,8 +316,8 @@ class PlayersMenuController:
     def __call__(self):
         self.menu.clear()
         self.menu.add("auto", "Créer", PlayersCreate)
-        self.menu.add("auto", "Consulter", PlayersMenuController)
-        self.menu.add("auto", "Modifier", RankingMenuController)
+        self.menu.add("auto", "Modifier Classement", RankingMenuController)
+        self.menu.add("auto", "Suppression Joueurs", DeletePlayerController)
         self.menu.add("r", "Retour", HomeMenuController)
 
         user_choice = self.view.get_user_choice("Players")
@@ -348,7 +393,42 @@ class PlayersCreate:
 
 
 class RankingMenuController:
-    pass
+    def __init__(self):
+        self.player = Player()
+        self.player_id = 0
+
+    def __call__(self, tournament_id=0):
+        print("ID".ljust(4) + ' ' + "Prénom".ljust(15) + ' ' + "Nom".ljust(15) + ' ' +
+              "Clas.".ljust(4))
+        print(self.player.display_all_table(True))
+        player_modif_rank: int = int(input("Pour quel joueur voulez-vous modifier le classement (saisir son n°) ? \n"))
+        new_rank: int = int(input("Quel est son nouveau classement ? \n"))
+        self.player.update_player_ranking(player_modif_rank, new_rank)
+        return PlayersMenuController
+
+
+class DeletePlayerController:
+    def __init__(self):
+        """ we add the tournament view and tournament model to the controller """
+        self.tournament = Tournament("", "", "")
+        self.player = Player()
+
+    def __call__(self):
+        id_player: int = 0
+        choice_deleting_player = int(input('Voulez-vous supprimer tous les joueurs (choix 1) ou un joueur '
+                                               'précis (choix 2) ?'))
+        if choice_deleting_player == 1:
+            DbManag.db.drop_table('player')
+        else:
+            print("ID".ljust(4) + ' ' + "Prénom".ljust(15) + ' ' + "Nom".ljust(15) + ' ' +
+                  "Clas.".ljust(4))
+            print(self.player.display_all_table(True))
+            try:
+                id_player = int(input('Quel joueur voulez-vous supprimer (saisir le n°) ?'))
+                self.player.delete_player(id_player)
+            except:
+                PlayersMenuController()
+        return PlayersMenuController
 
 
 class ReportMenuController:
@@ -373,6 +453,7 @@ class ReportMenuController:
         return user_choice.handler
 
 
+# FAIRE DES TESTS POUR VERIFIER QU'IL Y A DES DONNEES A AFFICHER POUR QUE CA NE PLANTE PAS !!!!!!!
 class ActorsReportController:
     def __init__(self):
         self.player = Player()
@@ -399,11 +480,11 @@ class PlayersReportController:
         self.tournament = Tournament("", "", "")
 
     def __call__(self):
+        id_tournament: int = 0
         print(self.tournament.display_all_table())
         try:
-            id_tournament: int = int(input('Pour quel tournoi voulez-vous afficher les joueurs (saisir le n°) ?'))
+            id_tournament = int(input('Pour quel tournoi voulez-vous afficher les joueurs (saisir le n°) ?'))
             """ displaying the players according to the sort chosen """
-
         except:
             PlayersReportController()
         try:
@@ -427,18 +508,50 @@ class TournamentsReportController:
 
     def __call__(self):
         """ displaying the tournaments """
-        print("Nom".ljust(15) + ' ' + "place".ljust(14) + ' ' + "date".ljust(14) + ' ' + "rounds".ljust(14) + ' ' +
-              "contrôle du temps".ljust(20) + ' ' + "description".ljust(20))
+        print("Nom".ljust(15) + ' ' + "place".ljust(14) + ' ' + "date".ljust(14) + ' ' + "date fin".ljust(14) + ' ' +
+              "rounds".ljust(14) + ' ' + "contrôle du temps".ljust(20) + ' ' + "description".ljust(20))
         print(self.tournament.display_all_tournaments())
         return ReportMenuController
 
 
 class RoundsReportController:
-    pass
+    def __init__(self):
+        self.tournament = Tournament("", "", "")
+        self.round = Round("", "", "")
+
+    def __call__(self):
+        id_tournament: int = 0
+        print(self.tournament.display_all_table())
+        try:
+            id_tournament = int(input('Pour quel tournoi voulez-vous afficher les rounds (saisir le n°) ?'))
+        except:
+            ReportMenuController()
+        """ displaying the rounds """
+        print("Nom".ljust(8) + "date/heure deb".ljust(20) + "date/heure fin".ljust(20) +
+              "matchs".ljust(14))
+        print(self.round.display_all_rounds(id_tournament))
+        return ReportMenuController
 
 
 class MatchsReportController:
-    pass
+    def __init__(self):
+        self.player = Player()
+        self.tournament = Tournament("", "", "")
+        self.round = Round("", "", "")
+        self.match = Match("", "", "", "", "", "")
+
+    def __call__(self):
+        id_tournament: int = 0
+        print(self.tournament.display_all_table())
+        try:
+            id_tournament = int(input('Pour quel tournoi voulez-vous afficher les matchs (saisir le n°) ?'))
+        except:
+            ReportMenuController()
+        """ displaying the matchs """
+        print("Round".ljust(8) + "1er Joueur".ljust(15) + "Points".ljust(8) +
+              "2e Joueur".ljust(15) + "Points".ljust(8))
+        print(self.match.display_all_matchs(id_tournament))
+        return ReportMenuController
 
 
 class ExitMenuController:

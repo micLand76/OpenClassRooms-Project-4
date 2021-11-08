@@ -1,6 +1,5 @@
 from models.access_db import DbManag
 from tinydb import TinyDB, where
-from operator import itemgetter, attrgetter
 
 
 class Player:
@@ -25,12 +24,18 @@ class Player:
     def insert_player(self, player_serializ):
         self.player.insert(player_serializ)
 
+    def delete_player(self, id_player: int):
+        self.player.remove(doc_ids=[id_player])
+
     def number_of_players(self) -> int:
         return len(self.player)
 
     def return_player_ranking(self, player_id: int) -> dict:
         data_player = self.player.get(doc_id=player_id)
         return {'id': player_id, 'rank': data_player['ranking']}
+
+    def update_player_ranking(self, player_id: int, new_rank: int):
+        self.player.update({'ranking': new_rank}, doc_ids=[player_id])
 
     def search_id_player(self, field='name', value=''):
         """ search the id of the player by giving a value of a field """
@@ -48,12 +53,18 @@ class Player:
                 'sex': player.sex,
                 'ranking': player.rank}
 
-    def display_all_table(self):
+    def display_all_table(self, display_rank: bool = False) -> str:
         all_players = self.player.all()
         nb_players = len(self.player)
-        return ''.join('Joueur ' + str(self.search_id_player('name', all_players[i].get('name'))) + ' ' +
-                       all_players[i].get('last_name') + " " + all_players[i].get('name') + " \n"
-                       for i in range(nb_players-1))
+        if display_rank is False:
+            return ''.join('Joueur ' + str(self.search_id_player('name', all_players[i].get('name'))) + ' ' +
+                           all_players[i].get('last_name') + " " + all_players[i].get('name') + " \n"
+                           for i in range(nb_players - 1))
+        else:
+            return ''.join(str(self.search_id_player('name', all_players[i].get('name'))).ljust(4) + ' ' +
+                           str(all_players[i].get('last_name')).ljust(15) + " " + str(all_players[i].get('name')).ljust(15) + " " +
+                           str(all_players[i].get('ranking')).ljust(4) + " \n"
+                           for i in range(nb_players - 1))
 
     def display_all_table_all_data(self, sorting_order=1):
         if sorting_order == 1:

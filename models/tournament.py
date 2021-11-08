@@ -23,6 +23,7 @@ class Tournament:
         self.name = name
         self.place = place
         self.tourn_date = tourn_date
+        self.tourn_date_end = None
         self.tour_number = tour_number
         self.time_control = time_control
         self.description = description
@@ -33,6 +34,7 @@ class Tournament:
         return {'name': self.name,
                 'place': self.place,
                 'tourn_date': datetime.datetime.now(),
+                'tourn_date_end': None,
                 'rounds': self.rounds,
                 'players': self.players,
                 'time_control': self.time_control,
@@ -50,6 +52,12 @@ class Tournament:
 
     def update_tournament_round(self, id_tournament: int, value: list):
         self.tournament.update({'rounds': value}, doc_ids=[id_tournament])
+
+    def update_tournament_date_end(self, id_tournament: int, value: datetime):
+        self.tournament.update({'tourn_date_end': value}, doc_ids=[id_tournament])
+
+    def delete_tournament(self, id_tournament: int):
+        self.tournament.remove(doc_ids=[id_tournament])
 
     def search_id_tournament(self, field='name', value=''):
         """ search the id of the tournament by giving a value of a field """
@@ -80,6 +88,7 @@ class Tournament:
         return ''.join(str(all_tournaments[i].get('name')).capitalize().ljust(15) +
                        str(all_tournaments[i].get('place')).capitalize().ljust(14) +
                        str(all_tournaments[i].get('tourn_date').strftime('%Y-%m-%d')).ljust(14) +
+                       str(all_tournaments[i].get('tourn_date_end').strftime('%Y-%m-%d')).ljust(14) +
                        str(all_tournaments[i].get('rounds')[0]).ljust(14) +
                        str(all_tournaments[i].get('time_control')).capitalize().ljust(20) +
                        str(all_tournaments[i].get('description')).capitalize().ljust(20) + "\n"

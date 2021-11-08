@@ -1,123 +1,11 @@
 {
-    "tournament": {
-        "1": {
-            "name": "aaaa",
-            "place": "",
-            "tourn_date": "{TinyDate}:2021-09-19T21:05:17.027442",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "Bullet",
-            "description": ""
-        },
-        "2": {
-            "name": "bbbb",
-            "place": "",
-            "tourn_date": "{TinyDate}:2021-09-19T21:05:17.027442",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "Bullet",
-            "description": ""
-        },
-        "3": {
-            "name": "cccc",
-            "place": "",
-            "tourn_date": "{TinyDate}:2021-09-19T21:05:17.027442",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "Bullet",
-            "description": ""
-        },
-        "4": {
-            "name": "dddd",
-            "place": "",
-            "tourn_date": "{TinyDate}:2021-09-19T21:05:17.027442",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "Bullet",
-            "description": ""
-        },
-        "5": {
-            "name": "ABCD",
-            "place": "Paris",
-            "tourn_date": "{TinyDate}:2021-09-19T21:11:09.616236",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "rapide",
-            "description": "Bullet"
-        },
-        "6": {
-            "name": "FETE",
-            "place": "REIMS",
-            "tourn_date": "{TinyDate}:2021-09-19T21:15:44.552963",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "bullet",
-            "description": "entre fran\u00c3\u00a7ais"
-        },
-        "7": {
-            "name": "Tournoi Jeunes",
-            "place": "Marseille",
-            "tourn_date": "{TinyDate}:2021-10-12T20:24:10.489994",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "bullet",
-            "description": "tournoi entre les jeunes de Marseille et de Paris"
-        },
-        "8": {
-            "name": "Tournoi Senior",
-            "place": "Paris",
-            "tourn_date": "{TinyDate}:2021-10-18T20:59:13.380046",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "bullet",
-            "description": "tournoi pour les plus de 60 ans"
-        },
-        "9": {
-            "name": "Tournoi de test",
-            "place": "Lyon",
-            "tourn_date": "{TinyDate}:2021-10-18T21:19:24.499923",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "blitz",
-            "description": "tournoi test"
-        },
-        "10": {
-            "name": "Tournoi de novembre",
-            "place": "Rolland Garros",
-            "tourn_date": "{TinyDate}:2021-10-27T22:04:29.456052",
-            "rounds": [
-                1
-            ],
-            "players": [],
-            "time_control": "blitz",
-            "description": "Tournoi international"
-        }
-    },
     "player": {
         "1": {
             "name": "dddd",
             "last_name": "dddd",
             "birth_date": "12/12/2000",
             "sex": "M",
-            "ranking": 0
+            "ranking": 6
         },
         "2": {
             "name": "Landauer",
@@ -138,7 +26,7 @@
             "last_name": "Philippe",
             "birth_date": "23/06/1989",
             "sex": "M",
-            "ranking": 0
+            "ranking": 3
         },
         "5": {
             "name": "Rigoux",
@@ -152,7 +40,7 @@
             "last_name": "Olivia",
             "birth_date": "13/12/1999",
             "sex": "F",
-            "ranking": 0
+            "ranking": 1
         },
         "7": {
             "name": "Roux",
@@ -173,7 +61,7 @@
             "last_name": "Stephanie",
             "birth_date": "16/01/1967",
             "sex": "F",
-            "ranking": 0
+            "ranking": 4
         },
         "10": {
             "name": "Roger",
@@ -188,6 +76,196 @@
             "birth_date": "12/03/1990",
             "sex": "M",
             "ranking": 0
+        }
+    },
+    "tournament": {
+        "1": {
+            "name": "Tournoi de test",
+            "place": "Paris",
+            "tourn_date": "{TinyDate}:2021-11-07T21:40:19.526376",
+            "tourn_date_end": "",
+            "rounds": [
+                1,
+                2,
+                3
+            ],
+            "players": [
+                2,
+                3,
+                5,
+                6,
+                7,
+                8,
+                4,
+                9
+            ],
+            "time_control": "bullet",
+            "description": "tournoi de test pour les jeunes"
+        },
+        "2": {
+            "name": "Tournoi international",
+            "place": "Londres",
+            "tourn_date": "{TinyDate}:2021-11-07T21:40:53.626021",
+            "tourn_date_end": "",
+            "rounds": [
+                0
+            ],
+            "players": [],
+            "time_control": "blitz",
+            "description": "tournoi reunissant tous les pays"
+        }
+    },
+    "round": {
+        "1": {
+            "tournament": 1,
+            "name": 1,
+            "data_hour_start": "{TinyDate}:2021-11-07T21:43:35.868963",
+            "data_hour_end": "{TinyDate}:2021-11-07T21:44:27.030339",
+            "match_id": [
+                3,
+                2,
+                1,
+                4
+            ],
+            "pairs": [
+                [
+                    3,
+                    2
+                ],
+                [
+                    6,
+                    5
+                ],
+                [
+                    8,
+                    7
+                ],
+                [
+                    9,
+                    4
+                ]
+            ]
+        },
+        "2": {
+            "tournament": 1,
+            "name": 2,
+            "data_hour_start": "{TinyDate}:2021-11-07T21:45:07.092731",
+            "data_hour_end": "{TinyDate}:2021-11-07T21:47:18.687220",
+            "match_id": [
+                7,
+                6,
+                5,
+                8
+            ],
+            "pairs": [
+                [
+                    3,
+                    9
+                ],
+                [
+                    7,
+                    4
+                ],
+                [
+                    8,
+                    5
+                ],
+                [
+                    2,
+                    6
+                ]
+            ]
+        },
+        "3": {
+            "tournament": 1,
+            "name": 3,
+            "data_hour_start": "{TinyDate}:2021-11-07T21:55:01.750492",
+            "data_hour_end": "",
+            "match_id": [],
+            "pairs": [
+                [
+                    2,
+                    9
+                ],
+                [
+                    3,
+                    5
+                ],
+                [
+                    8,
+                    7
+                ],
+                [
+                    6,
+                    4
+                ]
+            ]
+        }
+    },
+    "match": {
+        "1": {
+            "id_tournament": 1,
+            "round_name": 1,
+            "player_1": 9,
+            "result_1": 1,
+            "player_2": 4,
+            "result_2": 0
+        },
+        "2": {
+            "id_tournament": 1,
+            "round_name": 1,
+            "player_1": 3,
+            "result_1": 1,
+            "player_2": 2,
+            "result_2": 0
+        },
+        "3": {
+            "id_tournament": 1,
+            "round_name": 1,
+            "player_1": 6,
+            "result_1": 0.5,
+            "player_2": 5,
+            "result_2": 0.5
+        },
+        "4": {
+            "id_tournament": 1,
+            "round_name": 1,
+            "player_1": 8,
+            "result_1": 1,
+            "player_2": 7,
+            "result_2": 0
+        },
+        "5": {
+            "id_tournament": 1,
+            "round_name": 2,
+            "player_1": 2,
+            "result_1": 0,
+            "player_2": 6,
+            "result_2": 1
+        },
+        "6": {
+            "id_tournament": 1,
+            "round_name": 2,
+            "player_1": 3,
+            "result_1": 1,
+            "player_2": 9,
+            "result_2": 0
+        },
+        "7": {
+            "id_tournament": 1,
+            "round_name": 2,
+            "player_1": 7,
+            "result_1": 0.5,
+            "player_2": 4,
+            "result_2": 0.5
+        },
+        "8": {
+            "id_tournament": 1,
+            "round_name": 2,
+            "player_1": 8,
+            "result_1": 1,
+            "player_2": 5,
+            "result_2": 0
         }
     }
 }
