@@ -8,7 +8,7 @@ class Menu:
         self._entries = {}
         self._autokey = 1
 
-    def add(self, key, option, handler):
+    def add(self, key: str, option: str, handler):
         """ it allows to add menu options """
         if key == "auto":
             key = str(self._autokey)
@@ -24,18 +24,18 @@ class Menu:
         """ iterator of the entries """
         return self._entries.items()
 
-    def __getitem__(self, choice):
+    def __getitem__(self, choice: str) -> str:
         return self._entries[choice]
 
-    def __contains__(self, choice):
+    def __contains__(self, choice: str) -> bool:
         return str(choice) in self._entries
 
 
 class MenuEntry:
-    def __init__(self, option, handler):
+    """ this class is used to associate an option menu with a handler to manage the functions of the menu chosen """
+    def __init__(self, option: str, handler):
         self.option = option
         self.handler = handler
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.option)
-

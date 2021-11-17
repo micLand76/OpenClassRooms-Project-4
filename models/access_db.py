@@ -18,6 +18,5 @@ class DbManag:
     def close_db(self):
         self.db.close()
 
-    def search_data(self, field='name', value=''):
+    def search_data(self, field: str = 'name', value: str = None) -> list:
         return self.db.search(where(field) == value)
-

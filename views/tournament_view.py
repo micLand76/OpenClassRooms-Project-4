@@ -7,5 +7,7 @@ class TournamentView:
         self.quest_ctrl = 'Veuillez saisir le style de controle du temps (bullet, blitz ou coup rapide) : '
         self.quest_nb_round = 'Veuillez saisir le nombre de rounds : '
 
-    def tournament_ask(self, quest) -> None:
+    @staticmethod
+    def tournament_ask(quest: str) -> None:
+        """ to display nicely the questions """
         print(quest)

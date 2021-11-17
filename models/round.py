@@ -1,7 +1,7 @@
-import time
 from datetime import datetime
 from itertools import chain
-from tinydb import TinyDB, where
+from tinydb import where
+
 from models.access_db import DbManag
 from models.match import Match
 
@@ -11,16 +11,18 @@ class Round:
         It allows also to generate pairs of players with the Swiss method"""
     round = DbManag.db.table('round')
 
-    def __init__(self, tournament, name, data_hour_start, data_hour_end: datetime = None):
+    def __init__(self, tournament: int = None, name: int = None, data_hour_start: datetime = None,
+                 data_hour_end: datetime = None):
         self.match = Match(0, 0, 0, 0, 0, 0)
         self.tournament: int = tournament
         self.name = name
         self.data_hour_start: datetime = data_hour_start
         self.data_hour_end: datetime = data_hour_end
-        self.match_id = []
-        self.pairs = []
+        self.match_id: list = []
+        self.pairs: list = []
 
     def serializ_round(self) -> dict:
+        """ to insert the data into tinydb, they need to be serialized in a dict """
         return {'tournament': self.tournament,
                 'name': self.name,
                 'data_hour_start': self.data_hour_start,
@@ -28,18 +30,18 @@ class Round:
                 'match_id': self.match_id,
                 'pairs': self.pairs}
 
-    def insert_round(self, round_serializ):
+    def insert_round(self, round_serializ: dict):
+        """ after serialized the data, we can insert them into the database """
         self.round.insert(round_serializ)
 
-    def round_closed(self, round_id) -> bool:
+    def round_closed(self, round_id: int) -> bool:
         """ to check if the round is closed we look at the data_hour_end: it's empty if not finished """
         data_round = self.round.get(doc_id=round_id)
-        if data_round is not None:
-            data_hour_end = data_round['data_hour_end']
-            if data_hour_end is None:
-                return False
-            else:
-                return True
+        if data_round is None:
+            return True
+        data_hour_end = data_round['data_hour_end']
+        if data_hour_end is None:
+            return False
         else:
             return True
 
@@ -53,7 +55,7 @@ class Round:
             return_pairs.append(tuple(round_pairs[i - 1]))
         return return_pairs
 
-    def search_id_round(self, field='name', value: int = 0) -> int:
+    def search_id_round(self, field: str = 'name', value: int = 0) -> int:
         """ search the id of the round by giving a value of a field
         if the field given id the tournament_id, then we can return the last
         round_id with a loop on the results so the last result will be the last round
@@ -74,20 +76,18 @@ class Round:
             return_matchs.append(round_matchs[i - 1])
         return return_matchs
 
-    def update_round(self, id_round='', field='name', value=''):
+    def update_round(self, id_round: int = None, field: str = 'name', value=None):
+        """ for a given round id, we update the record of the round for a field given in parameter """
         self.round.update({field: value}, doc_ids=[id_round])
 
-    def delete_round(self, id_tournament: int):
-        self.round.remove(where('tournament') == id_tournament)
-
-    def pair_already_played(self, list_players: list, old_list_players: list, pair_players: tuple,
-                            test_already_apaired: True):
-        """ verify that this combination isn't already existing """
+    def pair_already_played(self, list_players: list, old_list_players: list, test_already_apaired: True,
+                            pair_players: tuple) -> bool:
+        """ verify that this combination of players isn't already existing """
         if self.player_already_apaired(list_players, pair_players) is True:
             if test_already_apaired is True:
                 return True
             else:
-                return pair_players
+                return False
         else:
             old_list = old_list_players
             return any(old_list[j] in [pair_players, pair_players[::-1]] for j in range(4))
@@ -101,20 +101,11 @@ class Round:
         else:
             return False
 
-    def return_total_points_player_round(self, tournament_id: int, round_name: int, player_id: int) -> int:
-        match_already = self.match.search_match('id_tournament', tournament_id)
-        total_points = 0
-        for m_already in match_already:
-            if m_already['round_name'] == round_name:
-                if m_already['player_1'] == player_id:
-                    total_points += m_already['result_1']
-                elif m_already['player_2'] == player_id:
-                    total_points += m_already['result_2']
-        return total_points
-
     def return_total_points_player_tournament(self, tournament_id: int, player_id: int) -> dict:
-        match_already = self.match.search_match('id_tournament', tournament_id)
-        total_points = 0
+        """ to associate players based on their points, we need to know the total of their points
+         for a tournament given """
+        match_already: list = self.match.search_match('id_tournament', tournament_id)
+        total_points: int = 0
         for m_already in match_already:
             if m_already['player_1'] == player_id:
                 total_points += m_already['result_1']
@@ -122,29 +113,29 @@ class Round:
                 total_points += m_already['result_2']
         return {'id': player_id, 'rank': total_points}
 
-    def generate_pair(self, list_player: list, old_list_players: list, sort_sens: bool = False):
+    def generate_pair(self, list_player: list, old_list_players: list, sort_sens: bool = False) -> list:
         """ to generate pairs we need to be sure that the couple hasn't played yet
         and if the 3 first couples are generated but the 4th had already played so we need to broke the
         3 first pairs """
         pairs: list = []
         list_player = sorted(list_player, key=lambda t: (t['rank'] == 0, t['rank']), reverse=sort_sens)
         i = 0
-        number_tours = 4
+        number_tours: int = 4
         while i < number_tours:
             players_couple: tuple = (list_player[i]['id'], list_player[i + 4]['id'])
             for _ in range(4):
                 num_player = 3
-                while self.pair_already_played(pairs, old_list_players, players_couple,
-                                               True) is True and num_player < 7:
+                while self.pair_already_played(pairs, old_list_players, True, players_couple) is True \
+                        and num_player < 7:
                     num_player += 1
                     players_couple = (list_player[i]['id'], list_player[num_player]['id'])
 
                 """ if the last pair already exists, we make a new pair and change others pairs """
-                if self.pair_already_played(pairs, old_list_players, players_couple, True) is True and i == 3:
+                if self.pair_already_played(pairs, old_list_players, True, players_couple) is True and i == 3:
                     for player_associate in range(7, 3, -1):
                         players_couple = (list_player[3]['id'], list_player[player_associate]['id'])
-                        return_pair_already_played = self.pair_already_played(pairs, old_list_players, players_couple,
-                                                                              False)
+                        return_pair_already_played = self.pair_already_played(pairs, old_list_players, False,
+                                                                              players_couple)
                         if return_pair_already_played is not True:
                             i = -1
                             number_tours = 3
@@ -158,20 +149,21 @@ class Round:
         return pairs
 
     def rounds_for_tournament(self, id_tournament: int):
+        """ for the report of the rounds, we need to know the rounds for a tournament given """
         return self.round.search(where('tournament') == id_tournament)
 
-    def display_all_rounds(self, id_tournament: int) -> str:
+    def display_all_rounds(self, id_tournament: int) -> str or None:
+        """ used for the report of the rounds for a tournament given """
         all_rounds = self.rounds_for_tournament(id_tournament)
         nb_rounds = len(all_rounds)
         all_rounds_return: str = ""
-        dte_hour_end: str = ""
+        dte_hour_end: str or None = None
         for i in range(nb_rounds):
             data_hour_end: datetime = all_rounds[i].get('data_hour_end', None)
-            if data_hour_end is not None:
-                data_hour_end = data_hour_end.strftime('%Y-%m-%d %H:%M')
-                dte_hour_end = str(data_hour_end)
+            if data_hour_end is not None and type(data_hour_end) is not str:
+                dte_hour_end: str = data_hour_end.strftime('%Y-%m-%d %H:%M')
             all_rounds_return += str(all_rounds[i].get('name')).capitalize().ljust(8) + \
-                                 str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
-                                 dte_hour_end.ljust(20) + \
-                                 str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
+                str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
+                dte_hour_end.ljust(20) + \
+                str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
         return all_rounds_return
