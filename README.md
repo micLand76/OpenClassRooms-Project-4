@@ -8,7 +8,12 @@ Chess Tournament
 
 ## Installation
 
-* You have just to clic on the py file
+* Install Python on your PC, for your OS, by downloading it on the Python website: https://www.python.org/downloads/
+* download the application on https://github.com/micLand76/OpenClassRooms-Project-4 by cliquing on 'Code' and download zip
+* extract the zip you've downloaded
+* with a terminal, change the repositorie where you are to be in the reporsitorie of the repositorie of the app
+* in the terminal, run pip command to install tinydb and tinydb_serialization (the command is 'pip install tinydb' for ex)
+* run the command 'python (or python3 on Linux) main.py'
 
 ## Usage
 

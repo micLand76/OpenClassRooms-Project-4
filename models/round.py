@@ -49,6 +49,8 @@ class Round:
         """ return the pairs for a round given in parameter
         the pairs are returned in tuple nd the 4 tuple in a list """
         data_round = self.round.get(doc_id=round_id)
+        if data_round is None:
+            return []
         round_pairs: list = data_round['pairs']
         return_pairs: list = []
         for i in range(len(round_pairs)):
@@ -161,9 +163,11 @@ class Round:
         for i in range(nb_rounds):
             data_hour_end: datetime = all_rounds[i].get('data_hour_end', None)
             if data_hour_end is not None and type(data_hour_end) is not str:
-                dte_hour_end: str = data_hour_end.strftime('%Y-%m-%d %H:%M')
+                dte_hour_end = data_hour_end.strftime('%Y-%m-%d %H:%M').ljust(20)
+            else:
+                dte_hour_end = " " * 20
             all_rounds_return += str(all_rounds[i].get('name')).capitalize().ljust(8) + \
                 str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
-                dte_hour_end.ljust(20) + \
+                dte_hour_end + \
                 str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
         return all_rounds_return

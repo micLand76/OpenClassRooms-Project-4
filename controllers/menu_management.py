@@ -237,7 +237,6 @@ class PairGenerateController:
                 self.round.pairs.append(players_couple)
         else:
             old_list_players: list = self.round.return_old_pairs(self.round_id)
-            print('old_list_players', old_list_players)
             """ with the list of the players of the last rounds, we can call the generate_pair method
             which give us the new pairs, different of the old one
             this new list of pairs of players id added to the pair attribut of the round instance """
