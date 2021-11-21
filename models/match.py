@@ -1,7 +1,6 @@
 from tinydb import where
 
 from models.access_db import DbManag
-import models
 
 
 class Match:
@@ -10,7 +9,6 @@ class Match:
 
     def __init__(self, id_tournament: int or None, round_name: int or None, player_1: int or None,
                  result_1: int or None, player_2: int or None, result_2: int or None):
-        self.player = models.Player()
         self.id_tournament: int = id_tournament
         self.round_name: int = round_name
         self.player_1: int = player_1
@@ -57,6 +55,8 @@ class Match:
     def display_all_matchs(self, id_tournament: int) -> str:
         """ displaying the matchs for a tournament given for the reports
         we separate the matchs of each round """
+        from player import Player
+        player = Player()
         all_matchs: list = self.search_match('id_tournament', id_tournament)
         nb_matchs: int = len(all_matchs)
         all_matchs_return: str or None = None
@@ -66,9 +66,9 @@ class Match:
                 if all_matchs[i].get('round_name') != round_last:
                     all_matchs_return += "\n"
                     round_last = all_matchs[i].get('round_name')
-                player1: str = self.player.search_instance_player_by_id(
+                player1: str = player.search_instance_player_by_id(
                     all_matchs[i].get('player_1'), id_tournament)['name']
-                player2: str = self.player.search_instance_player_by_id(
+                player2: str = player.search_instance_player_by_id(
                     all_matchs[i].get('player_2'), id_tournament)['name']
                 match_return: str = str(all_matchs[i].get('round_name')).capitalize().ljust(8) + \
                     str(all_matchs[i].get('id')).capitalize().ljust(8) + \

@@ -11,11 +11,11 @@ class Round:
         It allows also to generate pairs of players with the Swiss method"""
     round = DbManag.db.table('round')
 
-    def __init__(self, tournament: int = None, name: int = None, data_hour_start: datetime = None,
+    def __init__(self, tournament: int or None = None, name: int or None = None, data_hour_start: datetime = None,
                  data_hour_end: datetime = None):
         self.match = Match(0, 0, 0, 0, 0, 0)
-        self.tournament: int = tournament
-        self.name = name
+        self.tournament: int or None = tournament
+        self.name: int or None = name
         self.data_hour_start: datetime = data_hour_start
         self.data_hour_end: datetime = data_hour_end
         self.match_id: list = []
@@ -78,7 +78,7 @@ class Round:
             return_matchs.append(round_matchs[i - 1])
         return return_matchs
 
-    def update_round(self, id_round: int = None, field: str = 'name', value=None):
+    def update_round(self, id_round: int = None, field: str = 'name', value: str or int = None):
         """ for a given round id, we update the record of the round for a field given in parameter """
         self.round.update({field: value}, doc_ids=[id_round])
 
@@ -132,7 +132,7 @@ class Round:
                     num_player += 1
                     players_couple = (list_player[i]['id'], list_player[num_player]['id'])
 
-                """ if the last pair already exists, we make a new pair and change others pairs """
+                # if the last pair already exists, we make a new pair and change others pairs
                 if self.pair_already_played(pairs, old_list_players, True, players_couple) is True and i == 3:
                     for player_associate in range(7, 3, -1):
                         players_couple = (list_player[3]['id'], list_player[player_associate]['id'])
@@ -150,7 +150,7 @@ class Round:
 
         return pairs
 
-    def rounds_for_tournament(self, id_tournament: int):
+    def rounds_for_tournament(self, id_tournament: int) -> list:
         """ for the report of the rounds, we need to know the rounds for a tournament given """
         return self.round.search(where('tournament') == id_tournament)
 
@@ -158,7 +158,7 @@ class Round:
         """ used for the report of the rounds for a tournament given """
         all_rounds = self.rounds_for_tournament(id_tournament)
         nb_rounds = len(all_rounds)
-        all_rounds_return: str = ""
+        all_rounds_return: str or None = None
         dte_hour_end: str or None = None
         for i in range(nb_rounds):
             data_hour_end: datetime = all_rounds[i].get('data_hour_end', None)
@@ -166,8 +166,24 @@ class Round:
                 dte_hour_end = data_hour_end.strftime('%Y-%m-%d %H:%M').ljust(20)
             else:
                 dte_hour_end = " " * 20
-            all_rounds_return += str(all_rounds[i].get('name')).capitalize().ljust(8) + \
-                str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
-                dte_hour_end + \
-                str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
+            if all_rounds_return is None:
+                all_rounds_return = str(all_rounds[i].get('name')).capitalize().ljust(8) + \
+                                     str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
+                                     dte_hour_end + \
+                                     str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
+            else:
+                all_rounds_return += str(all_rounds[i].get('name')).capitalize().ljust(8) + \
+                    str(all_rounds[i].get('data_hour_start').strftime('%Y-%m-%d %H:%M')).ljust(20) + \
+                    dte_hour_end + \
+                    str(all_rounds[i].get('match_id')).strip('[]').ljust(14) + "\n"
         return all_rounds_return
+
+    def return_rounds_finished(self, id_tournament: int) -> int:
+        nb_rounds_finished: int = 0
+        all_rounds = self.rounds_for_tournament(id_tournament)
+        nb_rounds = len(all_rounds)
+        for i in range(nb_rounds):
+            data_hour_end: datetime = all_rounds[i].get('data_hour_end', None)
+            if data_hour_end is not None and type(data_hour_end) is not str:
+                nb_rounds_finished += 1
+        return nb_rounds_finished

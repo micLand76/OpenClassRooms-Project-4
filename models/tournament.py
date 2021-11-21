@@ -94,7 +94,7 @@ class Tournament:
         useful for the reports """
         all_tournaments = self.tournament.all()
         nb_tournaments = len(self.tournament)
-        list_tournament: str = ""
+        list_tournament: str or None = None
         date_end: str = str(None)
         nb_round_tournament: int = 0
         for i in range(nb_tournaments):
@@ -102,15 +102,24 @@ class Tournament:
                     type(all_tournaments[i].get('tourn_date_end')) is str:
                 date_end = " "
             else:
-                date_end = str(all_tournaments[i].get('tourn_date_end').strftime(None, '%Y-%m-%d'))
+                date_end = str(all_tournaments[i].get('tourn_date_end').strftime('%Y-%m-%d'))
             nb_round_tournament = max(all_tournaments[i].get('rounds'))
-            list_tournament += str(all_tournaments[i].get('name'))[:19].capitalize().ljust(20) + \
-                str(all_tournaments[i].get('place'))[:19].capitalize().ljust(20) + \
-                str(all_tournaments[i].get('tourn_date').strftime('%Y-%m-%d')).ljust(14) + \
-                date_end.ljust(14) + \
-                str(nb_round_tournament).ljust(14) + \
-                str(all_tournaments[i].get('time_control')).capitalize().ljust(20) + \
-                str(all_tournaments[i].get('description')).capitalize().ljust(30) + "\n"
+            if list_tournament is None:
+                list_tournament = str(all_tournaments[i].get('name'))[:19].capitalize().ljust(20) + \
+                                  str(all_tournaments[i].get('place'))[:19].capitalize().ljust(20) + \
+                                  str(all_tournaments[i].get('tourn_date').strftime('%Y-%m-%d')).ljust(14) + \
+                                  date_end.ljust(14) + \
+                                  str(nb_round_tournament).ljust(14) + \
+                                  str(all_tournaments[i].get('time_control')).capitalize().ljust(20) + \
+                                  str(all_tournaments[i].get('description')).capitalize().ljust(30) + "\n"
+            else:
+                list_tournament += str(all_tournaments[i].get('name'))[:19].capitalize().ljust(20) + \
+                                   str(all_tournaments[i].get('place'))[:19].capitalize().ljust(20) + \
+                                   str(all_tournaments[i].get('tourn_date').strftime('%Y-%m-%d')).ljust(14) + \
+                                   date_end.ljust(14) + \
+                                   str(nb_round_tournament).ljust(14) + \
+                                   str(all_tournaments[i].get('time_control')).capitalize().ljust(20) + \
+                                   str(all_tournaments[i].get('description')).capitalize().ljust(30) + "\n"
         return list_tournament
 
     def return_players(self, id_tournament: int) -> list:

@@ -7,13 +7,13 @@ class HomeMenuView:
     def __init__(self, menu: Menu):
         self.menu = menu
 
-    def get_user_choice(self, menu_label: str):
+    def get_user_choice(self, menu_label: str) -> str:
+        """ display the menu to the user,
+        ask to the user to make a choice,
+        and validate the user's choice"""
         while True:
-            """ display the menu to the user """
             self._display_menu(menu_label)
-            """ ask to the user to make a choice """
             choice = input("> ")
-            """ validate the user's choice """
             if choice in self.menu:
                 return self.menu[choice]
 

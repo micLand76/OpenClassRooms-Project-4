@@ -2,8 +2,6 @@ from datetime import datetime
 from models.access_db import DbManag
 from tinydb import where
 
-import models
-
 
 class Player:
     """ Class to create a Player with his attributes and to give his rank"""
@@ -45,7 +43,7 @@ class Player:
 
     def search_id_player(self, field: str = 'name', value: str = None) -> int:
         """ search the id of the player by giving a value of a field """
-        results = self.player.search(where(field) == value)  # returns a list
+        results = self.player.search(where(field) == value)
         for res in results:
             return res.doc_id
 
@@ -74,7 +72,9 @@ class Player:
     def return_total_points_player_tournament(tournament_id: int, player_id: int) -> int:
         """ used for the reports of the matchs and the players,
         to know the sum of the points of a player given for a tournament given"""
-        match_already: list = models.Match.search_match(models.Match, 'id_tournament', tournament_id)
+        from match import Match
+        match = Match()
+        match_already: list = match.search_match('id_tournament', tournament_id)
         total_points: int = 0
         for m_already in match_already:
             if m_already['player_1'] == player_id:

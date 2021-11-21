@@ -1,3 +1,5 @@
+""" it's the main file, where there's all the controllers
+ the HomeMenuController is called at the beginning of the app """
 from datetime import datetime
 
 from models.match import Match
@@ -9,9 +11,6 @@ from views.menu_view import HomeMenuView
 from views.player_view import PlayerView
 from views.tournament_view import TournamentView
 
-""" it's the main file, where there's all the controllers
- the HomeMenuController is called at the beginning of the app """
-
 
 class HomeMenuController:
     """ Controller of the Beginning Menu """
@@ -20,9 +19,10 @@ class HomeMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self):
+    def __call__(self) -> type:
         """ we add the entries for the menus at the beginning of the app
-        we let the prog to give the number of the menu (auto) """
+        we let the prog to give the number of the menu (auto)
+        it's return the next controller """
         self.menu.clear()
         self.menu.add("auto", "Tournois", TournamentMenuController)
         self.menu.add("auto", "Joueurs", PlayersMenuController)
@@ -30,7 +30,6 @@ class HomeMenuController:
         self.menu.add("q", "Quitter", ExitMenuController)
 
         user_choice = self.view.get_user_choice("Accueil")
-        """ return of the next controller """
         return user_choice.handler
 
 
@@ -41,7 +40,7 @@ class TournamentMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> str:
+    def __call__(self) -> type:
         """ we add the entries for the menu of the Tournament entry """
         self.menu.clear()
         self.menu.add("auto", "Créer", TournamentCreate)
@@ -51,7 +50,6 @@ class TournamentMenuController:
         self.menu.add("r", "Retour", HomeMenuController)
 
         user_choice = self.view.get_user_choice("Tournoi")
-        """ return of the next controller """
         return user_choice.handler
 
 
@@ -65,7 +63,7 @@ class TournamentCreate:
         self.tournament_view = TournamentView()
         self.tournament_id = None
 
-    def __call__(self):
+    def __call__(self) -> type:
         """ we ask the questions about the tournament and we add them to the instance of tournament
         and insert them into the Tinydb table Tournament """
         input_tournament = []
@@ -86,9 +84,7 @@ class TournamentCreate:
                     good_answer = True
             input_tournament.append(answer)
         self.tournament = Tournament(*input_tournament)
-        """ once the tournament is created, we instantiate a round """
         self.tournament.rounds.append(0)
-        """ the round is associated with the tournament """
         self.tournament.insert_tournament(self.tournament.serializ_tournament())
         self.tournament_id = self.tournament.search_id_tournament('name', self.tournament.name)
         return TournamentMenuController
@@ -125,7 +121,7 @@ class AssociatePlayersController:
         self.tournament_id = 0
         self.player_id = 0
 
-    def __call__(self, tournament_id: int = 0):
+    def __call__(self, tournament_id: int = 0) -> type:
         """ to associate 8 players (number of players for a tournament) to a tournament,
         we first need to choice a tournament, be sure that there's no players already associated,
         after that, we can choose 8 players in the list of all the players """
@@ -147,17 +143,18 @@ class AssociatePlayersController:
         i: int = 0
         while i < number_of_players:
             print('Veuillez saisir le n° du joueur que vous voulez associer pour le tournoi. ')
-            self.player_id = int(input())
-            """ manage the case of selecting a number of player who doesn't exist """
-            if self.player.player_exists(self.player_id) is False:
-                print('Ce joueur n\'existe pas')
-            elif self.player_id in list_players_selected:
-                """ manage the case of selecting twice the same player"""
-                print('Vous avez déjà sélectionné ce joueur')
-            else:
-                list_players_selected.append(self.player_id)
-                self.update_players_tournament()
-                i += 1
+            try:
+                self.player_id = int(input())
+                if self.player.player_exists(self.player_id) is False:
+                    print('Ce joueur n\'existe pas')
+                elif self.player_id in list_players_selected:
+                    print('Vous avez déjà sélectionné ce joueur')
+                else:
+                    list_players_selected.append(self.player_id)
+                    self.update_players_tournament()
+                    i += 1
+            except Exception:
+                print('Vous n\'avez pas saisi une valeur valide')
         return TournamentMenuController
 
     def update_players_tournament(self):
@@ -180,7 +177,9 @@ class PairGenerateController:
         self.player_id = 0
         self.round_id = 0
 
-    def __call__(self):
+    def __call__(self) -> type:
+        """ genetaion of the 4 pairs for a round
+        we need to confirm that the last round is finish before created a new one """
         list_id_tournaments: list = self.tournament.return_id_all_table_with_players()
         list_tournaments: str = self.tournament.display_all_table_with_players()
         if list_tournaments is None:
@@ -195,7 +194,6 @@ class PairGenerateController:
             if self.tournament_id not in list_id_tournaments:
                 print("Vous n'avez pas saisi le n° d'un tournoi valable.")
             else:
-                """ confirm that the last round is finish before created a new one """
                 self.round.tournament = self.tournament_id
                 self.round.name = self.tournament.return_rounds(self.tournament_id)[-1]
                 self.round_id = self.round.search_id_round('tournament', self.tournament_id)
@@ -230,16 +228,16 @@ class PairGenerateController:
 
     def generate_pairs(self, list_players_tournament: list, list_player: list, sort_sens: bool = False):
         """ this method is called to associate the 8 players in 4 pairs,
-        based on the rules of the Swiss tournament """
+        based on the rules of the Swiss tournament
+        with the list of the players of the last rounds, we can call the generate_pair method
+        which give us the new pairs, different of the old one
+        this new list of pairs of players id added to the pair attribut of the round instance """
         if self.round.name == 0:
             for i in range(1, len(list_players_tournament), 2):
                 players_couple: tuple = (list_players_tournament[i], list_players_tournament[i - 1])
                 self.round.pairs.append(players_couple)
         else:
             old_list_players: list = self.round.return_old_pairs(self.round_id)
-            """ with the list of the players of the last rounds, we can call the generate_pair method
-            which give us the new pairs, different of the old one
-            this new list of pairs of players id added to the pair attribut of the round instance """
             self.round.pairs.extend(self.round.generate_pair(list_player, old_list_players, sort_sens))
         print(self.round.pairs)
         self.round.name += 1
@@ -266,7 +264,9 @@ class EnterResultsController:
         self.round_id = 0
         self.match_id = 0
 
-    def __call__(self):
+    def __call__(self) -> type:
+        """ we enter the results of the matchs
+        if all the 4 matchs has been played, we can close the round """
         list_id_tournaments: list = self.tournament.return_id_all_table_with_players()
         list_tournaments: str = self.tournament.display_all_table_with_players()
         if list_tournaments is None:
@@ -306,9 +306,11 @@ class EnterResultsController:
                     list_matchs: list = self.round.return_matchs_id(self.round_id)
                     list_matchs.append(round_matchs)
                     self.round.update_round(self.round_id, 'match_id', list_matchs)
-                    """ if all the 4 matchs has been played, we can close the round """
                     if len(list_matchs) == 4:
                         self.round.update_round(self.round_id, 'data_hour_end', datetime.now())
+                        nb_rounds_finished: int = self.round.return_rounds_finished(self.match.id_tournament)
+                        if nb_rounds_finished == 4:
+                            self.tournament.update_tournament_date_end(self.match.id_tournament, datetime.now())
                 else:
                     print("Vous ne pouvez pas saisir de score pour ce tournoi car il n'y a pas assez de paires de"
                           " joueurs pour son dernier round ")
@@ -324,14 +326,13 @@ class PlayersMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> str:
+    def __call__(self) -> type:
         self.menu.clear()
         self.menu.add("auto", "Créer", PlayersCreate)
         self.menu.add("auto", "Modifier Classement", RankingMenuController)
         self.menu.add("r", "Retour", HomeMenuController)
 
         user_choice = self.view.get_user_choice("Players")
-        """ return of the next controller """
         return user_choice.handler
 
 
@@ -370,7 +371,7 @@ class PlayersCreate:
         else:
             return False
 
-    def __call__(self, nb_players: int = 1):
+    def __call__(self, nb_players: int = 1) -> type:
         """ we ask the questions about the players and we add them to the instance of players
         and insert them into the Tinydb table Player
          we loop those questions for all the players we want to add """
@@ -385,10 +386,8 @@ class PlayersCreate:
                 while not good_answer:
                     answer = input('>> ').strip()
                     if self.is_answer_empty(answer) is True:
-                        """ test the answer is not empty """
                         print('Vous n\'avez rien saisi comme valeur. Veuillez en saisir une.')
                     elif self.is_date_question(quest) and self.has_good_format_date(answer) is False:
-                        """ verify the date format """
                         print('Vous n\'avez pas saisi le bon format pour la date de naissance (dd/mm/yyyy).')
                     else:
                         good_answer = True
@@ -410,7 +409,7 @@ class RankingMenuController:
         self.player = Player()
         self.player_id = 0
 
-    def __call__(self, tournament_id: int = 0):
+    def __call__(self, tournament_id: int = 0) -> type:
         print("ID".ljust(4) + ' ' + "Prénom".ljust(15) + ' ' + "Nom".ljust(15) + ' ' +
               "Clas.".ljust(4))
         print(self.player.display_all_table(True))
@@ -427,7 +426,7 @@ class ReportMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self):
+    def __call__(self) -> type:
         """ we add the entries for the menu of the Report entry """
         self.menu.clear()
         self.menu.add("auto", "Acteurs", ActorsReportController)
@@ -438,7 +437,6 @@ class ReportMenuController:
         self.menu.add("r", "Retour", HomeMenuController)
 
         user_choice = self.view.get_user_choice("Rapports")
-        """ return of the next controller """
         return user_choice.handler
 
 
@@ -449,7 +447,7 @@ class ActorsReportController:
     def __init__(self):
         self.player = Player()
 
-    def __call__(self):
+    def __call__(self) -> type:
         """ displaying the actors according to the sort chosen """
         try:
             sorting_order: int = int(input('Voulez-vous trier les acteurs par ordre alphabétique (1) '
@@ -473,12 +471,12 @@ class PlayersReportController:
         self.player = Player()
         self.tournament = Tournament(None, None, None)
 
-    def __call__(self):
+    def __call__(self) -> type:
+        """ displaying the players according to the sort chosen """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
         try:
             id_tournament = int(input('Pour quel tournoi voulez-vous afficher les joueurs (saisir le n°) ?'))
-            """ displaying the players according to the sort chosen """
         except Exception:
             PlayersReportController()
         try:
@@ -502,7 +500,7 @@ class TournamentsReportController:
     def __init__(self):
         self.tournament = Tournament(None, None, None)
 
-    def __call__(self):
+    def __call__(self) -> type:
         """ displaying the tournaments """
         print("Nom".ljust(20) + "place".ljust(20) + "date".ljust(14) + "date fin".ljust(14) +
               "rounds".ljust(14) + "contrôle du temps".ljust(20) + "description".ljust(30))
@@ -517,14 +515,14 @@ class RoundsReportController:
         self.tournament = Tournament()
         self.round = Round()
 
-    def __call__(self):
+    def __call__(self) -> type:
+        """ displaying the rounds """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
         try:
             id_tournament = int(input('Pour quel tournoi voulez-vous afficher les rounds (saisir le n°) ?'))
         except Exception:
             ReportMenuController()
-        """ displaying the rounds """
         print("Nom".ljust(8) + "date/heure deb".ljust(20) + "date/heure fin".ljust(20) +
               "matchs".ljust(14))
         print(self.round.display_all_rounds(id_tournament))
@@ -540,14 +538,14 @@ class MatchsReportController:
         self.round = Round(None, None, None)
         self.match = Match(None, None, None, None, None, None)
 
-    def __call__(self):
+    def __call__(self) -> type:
+        """ displaying the matchs """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
         try:
             id_tournament = int(input('Pour quel tournoi voulez-vous afficher les matchs (saisir le n°) ?'))
         except Exception:
             ReportMenuController()
-        """ displaying the matchs """
         print("Round".ljust(8) + "Match".ljust(8) + "1er Joueur".ljust(15) + "Points".ljust(8) +
               "2e Joueur".ljust(15) + "Points".ljust(8))
         print(self.match.display_all_matchs(id_tournament))

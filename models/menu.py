@@ -1,3 +1,6 @@
+from collections.abc import ItemsView
+
+
 class Menu:
     """ this class contains methods to manage the menu
     the attribut _entries contains the dictionary of the menu option
@@ -8,7 +11,7 @@ class Menu:
         self._entries = {}
         self._autokey = 1
 
-    def add(self, key: str, option: str, handler):
+    def add(self, key: str, option: str, handler: type):
         """ it allows to add menu options """
         if key == "auto":
             key = str(self._autokey)
@@ -20,7 +23,7 @@ class Menu:
         self._entries = {}
         self._autokey = 1
 
-    def items(self):
+    def items(self) -> ItemsView:
         """ iterator of the entries """
         return self._entries.items()
 
@@ -33,7 +36,7 @@ class Menu:
 
 class MenuEntry:
     """ this class is used to associate an option menu with a handler to manage the functions of the menu chosen """
-    def __init__(self, option: str, handler):
+    def __init__(self, option: str, handler: type):
         self.option = option
         self.handler = handler
 
