@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-.idea/debug.log
-=======
 pair_register2.py
 questions
 test.py
-.idea/debug.log
+.idea/*
+.mypy_cache/*
+.pytest_cache/*
+flake-report/*
 db.json
->>>>>>> 4460d689ab3728600d23f83b72bb012d8b752d9e
