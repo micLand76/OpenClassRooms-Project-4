@@ -8,12 +8,33 @@ Chess Tournament
 
 ## Installation
 
-* Install Python on your PC, for your OS, by downloading it on the Python website: https://www.python.org/downloads/
-* download the application on https://github.com/micLand76/OpenClassRooms-Project-4 by cliquing on 'Code' and download zip
-* extract the zip you've downloaded
-* with a terminal, change the repositorie where you are to be in the reporsitorie of the repositorie of the app
-* in the terminal, run pip command to install tinydb and tinydb_serialization (the command is 'pip install tinydb' for ex)
-* run the command 'python (or python3 on Linux) main.py'
+# On a Windows OS:
+* paste: https://github.com/micLand76/OpenClassRooms-Project-4 on your navigator
+* There, clic on "Code" and on "Download.zip"
+* Download Python (at least version 3) on https://www.python.org/downloads/ and install it
+* Execute a Windows Terminal and enter the command to execute Python: 
+	change the place you are to go to the repo of python
+	try to execute the application: python c://"emplacement repo"/main.py
+* If you have a message that you don't have some librairies, install them with pip:
+* python -m pip install tinydb
+* python -m pip install tinydb_serialization
+* And try again to execute main.py 
+* install flake8: python -m pip install flake8
+* execute flake8 on main.py: python -m flake8 c://"emplacement repo"/main.py
+
+# On a linux OS:
+* Open a Terminal window
+* Install git: write: "sudo apt install git"
+* Clone the project on your computer: "git clone https://github.com/micLand76/OpenClassRooms-Project-4.git"
+* If python3 isn't yet on your computer (you can check by writing: python3 and Enter, if you have python3 already, it will display the python3 version) donwload it: "sudo apt install python3" 
+* After that, install pip: "sudo apt install python3-pip" (enter "yes" when it asks if you want to continue)
+* To use the app, install the librairies "tinydb" and "tinydb_serialization":
+* 'pip install tinydb'
+* 'pip install tinydb_serialization'
+* You can use the app with this chain: python3 "repo of the app/"main.py
+* Finally, install Flake8: "sudo apt install flake8" (enter "o" when it asks if you want to continue)
+* And flake8 main.py
+
 
 ## Usage
 
