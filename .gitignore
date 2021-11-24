@@ -2,8 +2,6 @@ controllers/__pycache__/
 views/__pycache__/
 models/__pycache__/
 pair_register2.py
-questions
-test.py
 .idea/*
 .mypy_cache/*
 .pytest_cache/*
