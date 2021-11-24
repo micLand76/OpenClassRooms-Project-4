@@ -14,7 +14,7 @@ Chess Tournament
 * Download Python (at least version 3) on https://www.python.org/downloads/ and install it
 * Execute a Windows Terminal and enter the command to execute Python: 
 	* change the place you are to go to the repo of python
-	* try to execute the application: ``` python c://"emplacement repo"/main.py
+	* try to execute the application: ``` python c://"emplacement repo"/main.py ```
 * If you have a message that you don't have some librairies, install them with pip:
   ```
   python -m pip install tinydb
@@ -32,8 +32,8 @@ Chess Tournament
 
 ### On a linux OS:
 * Open a Terminal window
-* Install git: write: ``` "sudo apt install git"
-* Clone the project on your computer: ``` "git clone https://github.com/micLand76/OpenClassRooms-Project-4.git"
+* Install git: write: ``` "sudo apt install git" ```
+* Clone the project on your computer: ``` "git clone https://github.com/micLand76/OpenClassRooms-Project-4.git" ```
 * If python3 isn't yet on your computer (you can check by writing: python3 and Enter, if you have python3 already, it will display the python3 version) donwload it: ``` "sudo apt install python3" 
 * After that, install pip: ``` "sudo apt install python3-pip"``` (enter "yes" when it asks if you want to continue)
 * To use the app, install the librairies "tinydb" and "tinydb_serialization":
@@ -41,9 +41,9 @@ Chess Tournament
  'pip install tinydb'
  'pip install tinydb_serialization'
 ```
-* You can use the app with this chain: ``` python3 "repo of the app/"main.py
-* Finally, install Flake8: ``` "sudo apt install flake8" (enter "o" when it asks if you want to continue)
-* And ``` flake8 main.py
+* You can use the app with this chain: ``` python3 "repo of the app/"main.py ```
+* Finally, install Flake8: ``` "sudo apt install flake8" ``` (enter "o" when it asks if you want to continue)
+* And ``` flake8 main.py ```
 
 
 ## Usage
