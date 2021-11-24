@@ -5,5 +5,4 @@ pair_register2.py
 .idea/*
 .mypy_cache/*
 .pytest_cache/*
-flake-report/*
 db.json
