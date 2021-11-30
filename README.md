@@ -11,16 +11,17 @@ Chess Tournament
 ### On a Windows OS:
 * paste:   ``` https://github.com/micLand76/OpenClassRooms-Project-4 on your navigator   ```
 * There, clic on "Code" and on "Download.zip"
-* Download Python (at least version 3) on https://www.python.org/downloads/ and install it
 * Execute a Windows Terminal and enter the command to execute Python: 
 	* change the place you are to go to the repo of python
+	* open a Git Bash window, use the commande: ``` python -m venv OC ``` 
+	* activate the virtual environment: ```  OC/Scripts/activate.bat ``` 
 	* try to execute the application: ``` python c://"emplacement repo"/main.py ```
-* If you have a message that you don't have some librairies, install them with pip:
+* install some librairies with pip:
   ```
   python -m pip install tinydb
   python -m pip install tinydb_serialization
   ```
-* And try again to execute main.py 
+* execute main.py 
 * install flake8: 
   ```
   python -m pip install flake8
@@ -32,10 +33,11 @@ Chess Tournament
 
 ### On a linux OS:
 * Open a Terminal window
-* Install git: write: ``` "sudo apt install git" ```
 * Clone the project on your computer: ``` "git clone https://github.com/micLand76/OpenClassRooms-Project-4.git" ```
-* If python3 isn't yet on your computer (you can check by writing: python3 and Enter, if you have python3 already, it will display the python3 version) donwload it: ``` "sudo apt install python3" 
-* After that, install pip: ``` "sudo apt install python3-pip"``` (enter "yes" when it asks if you want to continue)
+* in the repo of the project, open a Bash window:
+	* create the virtual environment; if you can't use venv, install it with: ```sudo apt install python3.8-venv```
+	* use the commande: ``` python3 -m venv OC ``` 
+	* activate the virtual environment: ``` source OC/bin/activate ``` 
 * To use the app, install the librairies "tinydb" and "tinydb_serialization":
 ```
  'pip install tinydb'
