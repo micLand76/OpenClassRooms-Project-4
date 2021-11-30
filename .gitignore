@@ -6,4 +6,4 @@ pair_register2.py
 .mypy_cache/*
 .pytest_cache/*
 db.json
-OC/*
+OC
