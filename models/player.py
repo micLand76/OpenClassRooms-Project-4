@@ -72,8 +72,8 @@ class Player:
     def return_total_points_player_tournament(tournament_id: int, player_id: int) -> int:
         """ used for the reports of the matchs and the players,
         to know the sum of the points of a player given for a tournament given"""
-        from match import Match
-        match = Match()
+        from models.match import Match
+        match = Match(None, None, None, None, None, None)
         match_already: list = match.search_match('id_tournament', tournament_id)
         total_points: int = 0
         for m_already in match_already:
@@ -92,13 +92,13 @@ class Player:
         if not display_rank:
             return ''.join('Joueur ' + str(self.search_id_player('name', all_players[i].get('name'))) + ' ' +
                            all_players[i].get('last_name') + " " + all_players[i].get('name') + " \n"
-                           for i in range(nb_players - 1))
+                           for i in range(nb_players))
         else:
             return ''.join(str(self.search_id_player('name', all_players[i].get('name'))).ljust(4) + ' ' +
                            str(all_players[i].get('last_name')).ljust(15) + " " +
                            str(all_players[i].get('name')).ljust(15) + " " +
                            str(all_players[i].get('ranking')).ljust(4) + " \n"
-                           for i in range(nb_players - 1))
+                           for i in range(nb_players))
 
     def display_all_table_all_data(self, sorting_order: int = 1) -> str:
         """ used for the report of the actors

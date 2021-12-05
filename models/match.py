@@ -55,7 +55,7 @@ class Match:
     def display_all_matchs(self, id_tournament: int) -> str:
         """ displaying the matchs for a tournament given for the reports
         we separate the matchs of each round """
-        from player import Player
+        from models.player import Player
         player = Player()
         all_matchs: list = self.search_match('id_tournament', id_tournament)
         nb_matchs: int = len(all_matchs)

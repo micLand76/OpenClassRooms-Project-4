@@ -19,7 +19,7 @@ class HomeMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ we add the entries for the menus at the beginning of the app
         we let the prog to give the number of the menu (auto)
         it's return the next controller """
@@ -28,19 +28,17 @@ class HomeMenuController:
         self.menu.add("auto", "Joueurs", PlayersMenuController)
         self.menu.add("auto", "Rapports", ReportMenuController)
         self.menu.add("q", "Quitter", ExitMenuController)
-
         user_choice = self.view.get_user_choice("Accueil")
         return user_choice.handler
 
 
 class TournamentMenuController:
     """ controller of the Tournament Menu """
-
     def __init__(self):
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ we add the entries for the menu of the Tournament entry """
         self.menu.clear()
         self.menu.add("auto", "Créer", TournamentCreate)
@@ -48,7 +46,6 @@ class TournamentMenuController:
         self.menu.add("auto", "Génération des Paires", PairGenerateController)
         self.menu.add("auto", "Saisi des Résultats", EnterResultsController)
         self.menu.add("r", "Retour", HomeMenuController)
-
         user_choice = self.view.get_user_choice("Tournoi")
         return user_choice.handler
 
@@ -63,7 +60,7 @@ class TournamentCreate:
         self.tournament_view = TournamentView()
         self.tournament_id = None
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ we ask the questions about the tournament and we add them to the instance of tournament
         and insert them into the Tinydb table Tournament """
         input_tournament = []
@@ -121,7 +118,7 @@ class AssociatePlayersController:
         self.tournament_id = 0
         self.player_id = 0
 
-    def __call__(self, tournament_id: int = 0) -> type:
+    def __call__(self, tournament_id: int = 0):
         """ to associate 8 players (number of players for a tournament) to a tournament,
         we first need to choice a tournament, be sure that there's no players already associated,
         after that, we can choose 8 players in the list of all the players """
@@ -181,7 +178,7 @@ class PairGenerateController:
         self.player_id = 0
         self.round_id = 0
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ generation of the 4 pairs for a round
         for the first round, we generate pairs based on the rank,
         for the next rounds, it's based on the points of the players
@@ -268,7 +265,7 @@ class EnterResultsController:
         self.round_id = 0
         self.match_id = 0
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ we enter the results of the matchs
         if all the 4 matchs has been played, we can close the round """
         list_id_tournaments: list = self.tournament.return_id_all_table_with_players()
@@ -334,7 +331,7 @@ class PlayersMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> type:
+    def __call__(self):
         self.menu.clear()
         self.menu.add("auto", "Créer", PlayersCreate)
         self.menu.add("auto", "Modifier Classement", RankingMenuController)
@@ -379,7 +376,7 @@ class PlayersCreate:
         else:
             return False
 
-    def __call__(self, nb_players: int = 1) -> type:
+    def __call__(self, nb_players: int = 1):
         """ we ask the questions about the players and we add them to the instance of players
         and insert them into the Tinydb table Player
          we loop those questions for all the players we want to add """
@@ -417,7 +414,7 @@ class RankingMenuController:
         self.player = Player()
         self.player_id = 0
 
-    def __call__(self, tournament_id: int = 0) -> type:
+    def __call__(self, tournament_id: int = 0):
         print("ID".ljust(4) + ' ' + "Prénom".ljust(15) + ' ' + "Nom".ljust(15) + ' ' +
               "Clas.".ljust(4))
         print(self.player.display_all_table(True))
@@ -434,7 +431,7 @@ class ReportMenuController:
         self.menu = Menu()
         self.view = HomeMenuView(self.menu)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ we add the entries for the menu of the Report entry """
         self.menu.clear()
         self.menu.add("auto", "Acteurs", ActorsReportController)
@@ -455,7 +452,7 @@ class ActorsReportController:
     def __init__(self):
         self.player = Player()
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ displaying the actors according to the sort chosen """
         try:
             sorting_order: int = int(input('Voulez-vous trier les acteurs par ordre alphabétique (1) '
@@ -479,7 +476,7 @@ class PlayersReportController:
         self.player = Player()
         self.tournament = Tournament(None, None, None)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ displaying the players according to the sort chosen """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
@@ -508,7 +505,7 @@ class TournamentsReportController:
     def __init__(self):
         self.tournament = Tournament(None, None, None)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ displaying the tournaments """
         print("Nom".ljust(20) + "place".ljust(20) + "date".ljust(14) + "date fin".ljust(14) +
               "rounds".ljust(14) + "contrôle du temps".ljust(20) + "description".ljust(30))
@@ -523,7 +520,7 @@ class RoundsReportController:
         self.tournament = Tournament()
         self.round = Round()
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ displaying the rounds """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
@@ -546,7 +543,7 @@ class MatchsReportController:
         self.round = Round(None, None, None)
         self.match = Match(None, None, None, None, None, None)
 
-    def __call__(self) -> type:
+    def __call__(self):
         """ displaying the matchs """
         id_tournament: int = 0
         print(self.tournament.display_all_table())
