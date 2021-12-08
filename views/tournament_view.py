@@ -13,9 +13,9 @@ class TournamentView:
         print(quest)
 
     @staticmethod
-    def display_message(message: str or None):
+    def display_message(message: str):
         print(message)
 
     @staticmethod
-    def recept_message(demand: str or None):
-        input(demand)
+    def recept_message(demand: str) -> str:
+        return input(demand)
