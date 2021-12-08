@@ -142,8 +142,7 @@ class AssociatePlayersController:
                     self.tournament_view.display_message('Vous ne pouvez pas changer les joueurs associés à ce '
                                                          'tournoi car ils ont déjà été appairés ')
                     return TournamentMenuController()
-        self.tournament_view.message = self.player.display_all_table()
-        self.tournament_view.display_message()
+        self.tournament_view.display_message(self.player.display_all_table())
         number_of_players: int = self.player.number_of_players()
         number_of_player_round: int = 8
         self.tournament_view.display_message("nombre total de joueurs = " + str(number_of_players))
