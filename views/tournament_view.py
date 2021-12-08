@@ -11,3 +11,11 @@ class TournamentView:
     def tournament_ask(quest: str) -> None:
         """ to display nicely the questions """
         print(quest)
+
+    @staticmethod
+    def display_message(message: str or None):
+        print(message)
+
+    @staticmethod
+    def recept_message(demand: str or None):
+        input(demand)

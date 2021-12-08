@@ -35,7 +35,8 @@ class Menu:
 
 
 class MenuEntry:
-    """ this class is used to associate an option menu with a handler to manage the functions of the menu chosen """
+    """ this class is used to associate an option menu with a handler
+    to manage the functions of the menu chosen """
     def __init__(self, option: str, handler):
         self.option = option
         self.handler = handler
